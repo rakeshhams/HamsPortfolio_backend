@@ -5,21 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class AboutElevationFeature extends Model
+class ProductSubCategory extends Model
 {
     use HasFactory;
-
-    protected $fillable = [
-        'icon',
-        'title',
+    protected  $fillable = [
+        'product_category_id',
+        'image',
         'description',
-        'year',
-        'link',
-        'file',
-        'is_active'
+        'title',
+       
     ];
-
     protected $casts = [
-        'is_active' => 'boolean'
+        'is_active' => 'boolean',
+
     ];
 }

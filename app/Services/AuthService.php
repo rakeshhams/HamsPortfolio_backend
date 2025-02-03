@@ -31,7 +31,7 @@ class AuthService
                 'phone' => $request->phone,
                 'company' => $request->company,
                 'user_type' => 'user',
-                'is_active' => 1,
+                'is_active' => 0,
                 'password' => Hash::make($request->password),
             ]);
 
@@ -104,6 +104,10 @@ class AuthService
 
             $user = User::where('email', $request->email)->first();
 
+            if($user->is_active==0){
+            return $this->apiResponse([], 'User is Not Active', false, 401);
+            }
+
             if (!$user || !Hash::check($request->password, $user->password)) {
                 return $this->apiResponse([], 'The provided credentials are incorrect.', false, 401);
             }
@@ -145,4 +149,35 @@ class AuthService
             return $this->apiResponse('Something went wrong.', $th->getMessage(), false, 500);
         }
     }
+
+    public function userList($request)
+    {
+        try {
+            $user=User::latest()->get();
+            return  $this->apiResponse($user, 'all user list', true, 200);
+        } catch (\Throwable $th) {
+            return $this->apiResponse('Something went wrong.', $th->getMessage(), false, 500);
+        }
+
+    }
+
+    public function approval ($request)
+    {
+     try {
+        $user=User::findOrFail($request->id);
+        $user->update([
+           
+                'is_active' => $request->is_active, 
+        ]);
+
+        return  $this->apiResponse([], 'user approval successful', true, 200);
+
+     } catch (\Throwable $th) {
+        return $this->apiResponse('Something went wrong.', $th->getMessage(), false, 500);
+     }
+
+    }
+
+
+
 }

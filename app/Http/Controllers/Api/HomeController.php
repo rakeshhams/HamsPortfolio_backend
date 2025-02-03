@@ -91,6 +91,19 @@ class HomeController extends Controller
     {
         return $this->homeService->ourClientList();
     }
+    public function clientProductList($id)
+    {
+        return $this->homeService->ClientProductList($id);
+    }
+
+    public function ourClientProductSaveOrUpdate (Request $request)
+    {
+        return $this->homeService->ourClientProductSaveOrUpdate($request);
+    }
+    public function clientProductDelete($id)
+    {
+       return $this->homeService->clientProductDelete($id);
+    }
 
     public function ourClientSaveOrUpdate(Request $request)
     {

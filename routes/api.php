@@ -65,6 +65,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('/virtually-save-or-update', [HomeController::class, 'virtualSectionSaveOrUpdate']);
         Route::get('/client-list', [HomeController::class, 'ourClientList']);
         Route::post('/client-save-or-update', [HomeController::class, 'ourClientSaveOrUpdate']);
+        Route::get('/client-product-list/{id}', [HomeController::class, 'clientProductList']);
+        Route::delete('/delete-client-product/{id}', [HomeController::class, 'clientProductDelete']);
+        Route::post('/client-Product-save-or-update', [HomeController::class, 'ourClientProductSaveOrUpdate']);
         Route::get('/sustainability-section', [HomeController::class, 'sustainabilitySection']);
         Route::post('/sustainability-save-or-update', [HomeController::class, 'sustainabilitySaveOrUpdate']);
         Route::get('/sustainability-feature-list', [HomeController::class, 'sustainabilityFeatureList']);
@@ -101,14 +104,25 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
         Route::get('/product-category-list', [ProductController::class, 'productCategory']);
         Route::post('/product-category-save-or-update', [ProductController::class, 'productCategorySaveOrUpdate']);
-        Route::get('/product-list', [ProductController::class, 'productList']);
+        Route::get('/product-list/{sub_category_id}', [ProductController::class, 'productList']);
         Route::post('/product-save-or-update', [ProductController::class, 'saveOrUpdateProduct']);
+        Route::get('product-details/{id}', [ProductController::class, 'productDetails']); 
+
+        Route::get('/product-sub-category-list/{category_id}', [ProductController::class, 'productSubCategory']);
+        Route::post('/product-sub-category-save-or-update', [ProductController::class, 'productSubCategorySaveOrUpdate']);
+   
+
+        
 
         //news And event
         Route::get('/news-and-event-list', [NewsAndEventController::class, 'newsAndEventList']);
         Route::post('/news-and-event-save-or-update', [NewsAndEventController::class, 'saveOrUpdateNewsAndEvent']);
         Route::get('category-list', [NewsAndEventController::class, 'categoryList']);
         Route::post('category-save-or-update', [NewsAndEventController::class, 'saveOrUpdateCategory']);
+
+        //Approval
+        Route::post('approval', [AuthController::class, 'approval']);
+        Route::get('user-list', [AuthController::class, 'userList']);
     });
 });
 
@@ -119,8 +133,15 @@ Route::prefix('client')->group(function () {
     Route::get('home-service-by-submenu-id/{id}', [HomeController::class, 'homeServiceBySubmenuId']);
     Route::get('about-page', [AboutController::class, 'aboutPage']);
     Route::get('product-by-client-id/{id}', [AboutController::class, 'productByClientId']);
+    Route::get('/client-product-list/{id}', [HomeController::class, 'clientProductList']);
+
+
     Route::get('product-category-list', [ProductController::class, 'productCategory']);
+    Route::get('product-sub-category-list/{category_id}', [ProductController::class, 'productSubCategoryClient']);
+    Route::get('product-list-by-sub-category-id/{sub_category_id}', [ProductController::class, 'productListSubCategoryClient']);
+
     Route::get('product-by-category-id/{id}', [ProductController::class, 'productByCategoryId']);
+
     Route::get('product-details/{id}', [ProductController::class, 'productDetails']);
     Route::get('certification-list', [CommonController::class, 'certificationList']);
     Route::get('news-and-event-page', [NewsAndEventController::class, 'newsAndEventPage']);

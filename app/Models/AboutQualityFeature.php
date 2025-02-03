@@ -13,7 +13,8 @@ class AboutQualityFeature extends Model
         'about_quality_section_id',
         'title',
         'description',
-        'image',
+        'designation',
+        'icon',
         'is_active',
     ];
 

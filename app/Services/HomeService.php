@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Http\Traits\HelperTrait;
 use App\Models\Certification;
+use App\Models\ClientProduct;
 use App\Models\CompanyAchievement;
 use App\Models\HeroSlider;
 use App\Models\HomeAboutSection;
@@ -413,6 +414,67 @@ class HomeService
         }
     }
 
+
+
+
+    public function clientProductList($id)
+    {
+        try {
+            $pClients = ClientProduct::where('client_id', $id)->get();
+            return $this->apiResponse($pClients, 'Our Product List Get Successfully', true, 200);
+        } catch (\Throwable $th) {
+            return $this->apiResponse([], $th->getMessage(), false, 500);
+        }
+    }
+    public function ourClientProductSaveOrUpdate($request)
+    {
+    try {
+            $ourClient = [
+                'client_id' => $request->client_id,
+                'image' => $request->image,
+                'name' => $request->name,
+                'description' => $request->description,
+            ];
+            $request->validate([
+                'client_id' => 'required',
+            ]);
+            if (empty($request->id)) {
+                $pClient = ClientProduct::create($ourClient);
+                if ($request->hasFile('image')) {
+                    $pClient->image = $this->imageUpload($request, 'image', 'image');
+                    $pClient->save();
+                }
+                return $this->apiResponse($pClient, 'Our product Saved Successfully', true, 201);
+            } else {
+                
+                $pClient = ClientProduct::find($request->id);
+                $pClient->update($ourClient);
+                if ($request->hasFile('image')) {
+                    $pClient->image = $this->imageUpload($request, 'image', 'image', $pClient->image);
+                    $pClient->save();
+                }
+                return $this->apiResponse($pClient, 'Our product Updated Successfully', true, 200);
+            }
+        } catch (\Throwable $th) {
+            return $this->apiResponse([], $th->getMessage(), 500);
+        }
+    }
+
+    public function clientProductDelete($id)
+    {
+        try {
+            $clientProduct = ClientProduct::find($id);
+            if ($clientProduct->image!= null) {
+                $this->deleteImage($clientProduct->image);
+            }
+            $clientProduct->delete();
+            return $this->apiResponse([], 'Our client product Deleted Successfully', true, 200);
+            } catch (\Throwable $th) {
+                return $this->apiResponse([], $th->getMessage(), false, 500);
+            }
+
+    } 
+
     public function sustainabilitySection()
     {
         try {
@@ -595,11 +657,11 @@ class HomeService
     {
         try {
             $homePage = [
-                'slider' => HeroSlider::select('id', 'short_title', 'title', 'description', 'button_text', 'button_link', 'image')->get(),
+                'slider' => HeroSlider::where('is_active', 1)->select('id', 'short_title', 'title', 'description', 'button_text', 'button_link', 'image')->get(),
                 'sliderFeature' => SliderFeatureSection::select('id', 'title_one', 'title_two', 'title_three', 'title_four', 'logo')->first(),
                 'about' => HomeAboutSection::select('id', 'short_title', 'title', 'short_description', 'description', 'button_text', 'button_link', 'featured_image', 'start_count', 'end_count', 'name')->first(),
                 'ourService' => OurService::select('id', 'title', 'description', 'image')->get(), // 'image
-                'achievement' => CompanyAchievement::select('id', 'title', 'count_start', 'count_end', 'link', 'icon')->get(),
+                'achievement' => CompanyAchievement::where('is_active', 1)->select('id', 'title', 'count_start', 'count_end', 'link', 'icon',)->get(),
                 'subMenuList' => SubMenu::where('menu_id', 7)->select('id', 'menu_id', 'name', 'description', 'link',)->get(),
                 'virtually' => VirtuallySection::select('id', 'sort_title', 'title', 'description', 'button_text', 'link', 'bg_image')->first(),
                 'product' => HomeProductSection::select('id', 'sort_title', 'title', 'description')->first(),
@@ -608,7 +670,7 @@ class HomeService
                 'sustainability' => HomeSustainability::select('id', 'title', 'description', 'button_text', 'button_link')->first(),
                 'sustainabilityFeature' => HomeSustainabilityFeature::select('id', 'home_sustainability_id', 'title', 'color', 'count', 'icon')->get(),
                 'certification' => HomeCertification::select('id', 'sort_title', 'title', 'description', 'button_text', 'button_link')->first(),
-                'certificationList' => Certification::select('id', 'certification_category_id', 'sort_title', 'title', 'description', 'button_text', 'button_link', 'image', 'certificate_img')->take(6)->get(),
+                'certificationList' => Certification::select('id', 'certification_category_id', 'sort_title', 'title', 'description', 'button_text', 'button_link', 'image', 'certificate_img')->get(),
             ];
             return $this->apiResponse($homePage, 'Home Page Get Successfully', true, 200);
         } catch (\Throwable $th) {

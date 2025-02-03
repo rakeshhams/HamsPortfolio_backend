@@ -5,16 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Subscription extends Model
+class ClientProduct extends Model
 {
     use HasFactory;
-
+    
     protected $fillable = [
-        'email',
+        'client_id',
         'name',
-        'company',
-        'phone'
+        'image',
+        'description'
     ];
-
-
 }

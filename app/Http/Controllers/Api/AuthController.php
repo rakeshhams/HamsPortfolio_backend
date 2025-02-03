@@ -42,5 +42,14 @@ class AuthController extends Controller
         return $this->authService->logout($request);
     }
 
+
+   public function userList(Request $request)
+    {
+        return $this->authService->userList($request);
+    }
+    public function approval(Request $request)
+    {
+        return $this->authService->approval($request);
+    }
     
 }

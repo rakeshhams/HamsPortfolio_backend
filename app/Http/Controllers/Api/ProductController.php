@@ -24,9 +24,9 @@ class ProductController extends Controller
         return $this->productService->productCategorySaveOrUpdate($request);
     }
 
-    public function productList()
+    public function productList(Request $request)
     {
-        return $this->productService->productList();
+        return $this->productService->productList($request);
     }
 
     public function saveOrUpdateProduct(Request $request)
@@ -38,10 +38,31 @@ class ProductController extends Controller
     {
         return $this->productService->productByCategoryId($request);
     }
+    public function productSubCategoryClient(Request $request)
+    {
+        return $this->productService->productSubCategoryClient($request);
+        
+    }
+    public function productListSubCategoryClient(Request $request)
+    {
+        
+        return $this->productService->productListSubCategoryClient($request);
+
+    }
 
     public function productDetails(Request $request)
     {
         return $this->productService->productDetails($request);
+    }
+
+    public function productSubCategorySaveOrUpdate (Request $request)
+    {
+        return $this->productService->productSubCategorySaveOrUpdate($request);
+    }
+
+    public function productSubCategory(Request $request,$category_id)
+    {
+        return $this->productService->productSubCategoryListByCategoryId($request,$category_id);
     }
 
 }

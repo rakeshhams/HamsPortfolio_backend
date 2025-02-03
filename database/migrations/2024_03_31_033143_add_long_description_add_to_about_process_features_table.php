@@ -13,13 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('about_journey_sections', function (Blueprint $table) {
-            $table->id();
-            $table->string('short_title')->nullable();
-            $table->string('title')->nullable();
-            $table->longText('description')->nullable();
-            $table->string('bg_image')->nullable();
-            $table->timestamps();
+        Schema::table('about_process_features', function (Blueprint $table) {
+            $table->text('long_description')->nullable()->after('description');
         });
     }
 
@@ -30,6 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('about_journey_sections');
+        Schema::table('about_process_features', function (Blueprint $table) {
+            $table->text('long_description')->nullable();
+        });
     }
 };

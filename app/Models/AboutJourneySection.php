@@ -13,5 +13,6 @@ class AboutJourneySection extends Model
         'short_title',
         'title',
         'description',
+        'bg_image',
     ];
 }

@@ -13,6 +13,7 @@ class AboutProcessFeature extends Model
         'about_process_section_id',
         'title',
         'description',
+        'long_description', 
         'image',
         'is_active',
     ];
