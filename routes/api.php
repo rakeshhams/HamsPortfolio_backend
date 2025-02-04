@@ -9,6 +9,8 @@ use App\Http\Controllers\Api\CommonController;
 use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\NewsAndEventController;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\BusinessOverviewController;
+
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
 
@@ -123,6 +125,13 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         //Approval
         Route::post('approval', [AuthController::class, 'approval']);
         Route::get('user-list', [AuthController::class, 'userList']);
+
+        //Business Overview 
+        Route::get('business-sections', [BusinessOverviewController::class, 'index']);
+        Route::get('business-sections/{id}', [BusinessOverviewController::class, 'show']);
+        Route::post('business-sections', [BusinessOverviewController::class, 'store']);
+        Route::put('business-sections/{id}', [BusinessOverviewController::class, 'update']);
+        Route::delete('business-sections/{id}', [BusinessOverviewController::class, 'destroy']);
     });
 });
 
@@ -149,6 +158,7 @@ Route::prefix('client')->group(function () {
     Route::get('recent-post', [NewsAndEventController::class, 'recentPost']);
     Route::get('section-and-submenu-by-menu-id/{id}',[CommonController::class,'sectionAndSubMenuByMenuId']);
     Route::post('subscription',[CommonController::class,'subscription']);
+    Route::get('business-sections', [BusinessOverviewController::class, 'index']);
 });
 
 // test route
