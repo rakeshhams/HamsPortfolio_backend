@@ -146,6 +146,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('business-materials/{id}', [BusinessOverviewController::class, 'updateBusinessMaterial']); // Update
         Route::delete('business-materials/{id}', [BusinessOverviewController::class, 'deleteBusinessMaterial']); // Delete
 
+        Route::get('knitting-unit', [BusinessOverviewController::class, 'getKnittingUnit']); // Fetch knitting unit
+        Route::post('knitting-unit', [BusinessOverviewController::class, 'updateKnittingUnit']); // Update knitting unit
+
     });
 });
 

@@ -7,6 +7,7 @@ use App\Models\BusinessHeroSection;
 use App\Models\BusinessProductSection;
 use App\Models\BusinessProductImages;
 use App\Models\BusinessMaterial;
+use App\Models\BusinessKnittingUnit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -290,6 +291,51 @@ class BusinessOverviewController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Business material deleted successfully'
+        ], 200);
+    }
+    // Knitting Units: Fetch
+    public function getKnittingUnit()
+    {
+        $knittingUnit = BusinessKnittingUnit::first();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Knitting unit retrieved successfully',
+            'data' => $knittingUnit
+        ], 200);
+    }
+
+    // Knitting Units: Update
+    public function updateKnittingUnit(Request $request)
+    {
+        $knittingUnit = BusinessKnittingUnit::firstOrCreate([]);
+
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation errors',
+                'errors' => $validator->errors()
+            ], 400);
+        }
+
+        $knittingUnit->fill($request->only('title', 'description'));
+
+        if ($request->hasFile('image')) {
+            $knittingUnit->image = $this->imageUpload($request, 'image', 'knitting_units');
+        }
+
+        $knittingUnit->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Knitting unit updated successfully',
+            'data' => $knittingUnit
         ], 200);
     }
 
