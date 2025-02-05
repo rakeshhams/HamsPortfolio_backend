@@ -202,7 +202,8 @@ Route::prefix('client')->group(function () {
     Route::get('garment-unit', [BusinessOverviewController::class, 'getGarmentUnit']); // Fetch garment unit
     Route::get('sustainability-unit', [BusinessOverviewController::class, 'getSustainabilityUnit']); // Fetch sustainability unit
     Route::get('multiple-units', [BusinessOverviewController::class, 'getMultipleUnits']); // Fetch list of multiple units
-    Route::get('dyeing-units', [BusinessOverviewController::class, 'getDyeingUnits']); // Fetch all dyeing units
+    Route::get('dyeing-units', [BusinessOverviewController::class, 'getDyeingUnits']); // Fetch all dyeing 
+    
 
 });
 
