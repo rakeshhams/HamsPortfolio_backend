@@ -78,7 +78,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('certification-Section-update', [HomeController::class, 'certificationSectionUpdate']);
         Route::get('/certification-list', [HomeController::class, 'certificationList']);
         Route::post('/certification-save-or-update', [HomeController::class, 'certificationSaveOrUpdate']);
-       
+
         //about us
         Route::get('/who-we-are-section', [AboutController::class, 'whoWeAreSection']);
         Route::post('/who-we-are-section-update', [AboutController::class, 'whoWeAreSectionUpdate']);
@@ -108,13 +108,13 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('/product-category-save-or-update', [ProductController::class, 'productCategorySaveOrUpdate']);
         Route::get('/product-list/{sub_category_id}', [ProductController::class, 'productList']);
         Route::post('/product-save-or-update', [ProductController::class, 'saveOrUpdateProduct']);
-        Route::get('product-details/{id}', [ProductController::class, 'productDetails']); 
+        Route::get('product-details/{id}', [ProductController::class, 'productDetails']);
 
         Route::get('/product-sub-category-list/{category_id}', [ProductController::class, 'productSubCategory']);
         Route::post('/product-sub-category-save-or-update', [ProductController::class, 'productSubCategorySaveOrUpdate']);
-   
 
-        
+
+
 
         //news And event
         Route::get('/news-and-event-list', [NewsAndEventController::class, 'newsAndEventList']);
@@ -127,11 +127,18 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('user-list', [AuthController::class, 'userList']);
 
         //Business Overview 
-        Route::get('business-sections', [BusinessOverviewController::class, 'index']);
-        Route::get('business-sections/{id}', [BusinessOverviewController::class, 'show']);
-        Route::post('business-sections', [BusinessOverviewController::class, 'store']);
-        Route::put('business-sections/{id}', [BusinessOverviewController::class, 'update']);
-        Route::delete('business-sections/{id}', [BusinessOverviewController::class, 'destroy']);
+        // Hero Section
+        Route::get('hero-section', [BusinessOverviewController::class, 'getHeroSection']);
+        Route::post('hero-section', [BusinessOverviewController::class, 'updateHeroSection']);
+
+        // Dynamic Image Section Metadata
+        Route::get('dynamic-image-section', [BusinessOverviewController::class, 'getDynamicImageSection']);
+        Route::post('dynamic-image-section', [BusinessOverviewController::class, 'updateDynamicImageSection']);
+
+        // Dynamic Images
+        Route::get('dynamic-images', [BusinessOverviewController::class, 'getDynamicImages']);
+        Route::post('dynamic-images', [BusinessOverviewController::class, 'createDynamicImage']);
+        Route::delete('dynamic-images/{id}', [BusinessOverviewController::class, 'deleteDynamicImage']);
     });
 });
 
@@ -156,9 +163,12 @@ Route::prefix('client')->group(function () {
     Route::get('news-and-event-page', [NewsAndEventController::class, 'newsAndEventPage']);
     Route::get('news-details/{id}', [NewsAndEventController::class, 'newsDetailsPage']);
     Route::get('recent-post', [NewsAndEventController::class, 'recentPost']);
-    Route::get('section-and-submenu-by-menu-id/{id}',[CommonController::class,'sectionAndSubMenuByMenuId']);
-    Route::post('subscription',[CommonController::class,'subscription']);
-    Route::get('business-sections', [BusinessOverviewController::class, 'index']);
+    Route::get('section-and-submenu-by-menu-id/{id}', [CommonController::class, 'sectionAndSubMenuByMenuId']);
+    Route::post('subscription', [CommonController::class, 'subscription']);
+    // Route::get('business-sections', [BusinessOverviewController::class, 'index']);
+
+    //
+    Route::get('hero-section', [BusinessOverviewController::class, 'getHeroSection']);
 });
 
 // test route
@@ -173,7 +183,8 @@ Route::any('/test', function (Request $request) {
 
 
 
-Route::any('{url}', function () {;
+Route::any('{url}', function () {
+    ;
     return response()->json([
         'status' => false,
         'message' => 'Route Not Found! Please Check Your URL',

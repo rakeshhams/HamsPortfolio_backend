@@ -3,61 +3,77 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\BusinessDetail;
+use App\Models\BusinessHeroSection;
+use App\Models\BusinessProductSection;
+use App\Models\BusinessProductImages;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class BusinessOverviewController extends Controller {
-    
-    // Fetch all sections (Admin & Client)
-    public function index(Request $request) {
-        $query = BusinessDetail::query();
 
-        // Optional: Filter by section
-        if ($request->has('section')) {
-            $query->where('section', $request->section);
-        }
+    // Hero Section: Fetch
+    public function getHeroSection() {
+        $heroSection = BusinessHeroSection::first();
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Business details retrieved successfully',
-            'data' => $query->get()
+            'message' => 'Hero section retrieved successfully',
+            'data' => $heroSection
         ], 200);
     }
 
-    // Fetch a single section by ID
-    public function show($id) {
-        $section = BusinessDetail::find($id);
-        if (!$section) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Section not found',
-                'data' => null
-            ], 404);
+    // Hero Section: Update
+    public function updateHeroSection(Request $request) {
+        $heroSection = BusinessHeroSection::firstOrCreate([]);
+
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'hero_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'additional_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 'error', 'message' => 'Validation errors', 'errors' => $validator->errors()], 400);
         }
+
+        $heroSection->fill($request->only('title', 'description'));
+
+        if ($request->hasFile('hero_image')) {
+            $heroSection->hero_image = $request->file('hero_image')->store('hero_images', 'public');
+        }
+
+        if ($request->hasFile('additional_image')) {
+            $heroSection->additional_image = $request->file('additional_image')->store('hero_images', 'public');
+        }
+
+        $heroSection->save();
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Section retrieved successfully',
+            'message' => 'Hero section updated successfully',
+            'data' => $heroSection
+        ], 200);
+    }
+
+    // Dynamic Image Section Metadata: Fetch
+    public function getDynamicImageSection() {
+        $section = BusinessProductSection::first();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Dynamic image section metadata retrieved successfully',
             'data' => $section
         ], 200);
     }
 
-    // Store new section (Admin Only)
-    public function store(Request $request) {
-        if (!auth()->user() || !auth()->user()->isAdmin()) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Unauthorized',
-                'data' => null
-            ], 403);
-        }
+    // Dynamic Image Section Metadata: Update
+    public function updateDynamicImageSection(Request $request) {
+        $section = BusinessProductSection::firstOrCreate([]);
 
         $validator = Validator::make($request->all(), [
-            'section' => 'required|string|max:255',
-            'title' => 'required|string|max:255',
-            'content' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'main_title' => 'required|string|max:255',
+            'description' => 'nullable|string',
         ]);
 
         if ($validator->fails()) {
@@ -68,93 +84,71 @@ class BusinessOverviewController extends Controller {
             ], 400);
         }
 
-        $data = $request->only('section', 'title', 'content');
-
-        if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('business_images', 'public');
-        }
-
-        $section = BusinessDetail::create($data);
+        $section->fill($request->only('main_title', 'description'));
+        $section->save();
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Business section created successfully',
+            'message' => 'Dynamic image section updated successfully',
             'data' => $section
+        ], 200);
+    }
+
+    // Dynamic Images: Fetch
+    public function getDynamicImages() {
+        $dynamicImages = BusinessProductImages::all();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Dynamic images retrieved successfully',
+            'data' => $dynamicImages
+        ], 200);
+    }
+
+    // Dynamic Images: Create
+    public function createDynamicImage(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:255',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation errors',
+                'errors' => $validator->errors()
+            ], 400);
+        }
+
+        $data = $request->only('title');
+        $data['image'] = $request->file('image')->store('dynamic_images', 'public');
+
+        $dynamicImage = BusinessProductImages::create($data);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Dynamic image created successfully',
+            'data' => $dynamicImage
         ], 201);
     }
 
-    // Update a section (Admin Only)
-    public function update(Request $request, $id) {
-        if (!auth()->user() || !auth()->user()->isAdmin()) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Unauthorized',
-                'data' => null
-            ], 403);
-        }
+    // Dynamic Images: Delete
+    public function deleteDynamicImage($id) {
+        $dynamicImage = BusinessProductImages::find($id);
 
-        $section = BusinessDetail::find($id);
-        if (!$section) {
+        if (!$dynamicImage) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Section not found',
-                'data' => null
+                'message' => 'Image not found'
             ], 404);
         }
 
-        $validator = Validator::make($request->all(), [
-            'title' => 'required|string|max:255',
-            'content' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Validation errors',
-                'errors' => $validator->errors()
-            ], 400);
-        }
-
-        $section->update($request->only('title', 'content'));
-
-        if ($request->hasFile('image')) {
-            $section->image = $request->file('image')->store('business_images', 'public');
-            $section->save();
-        }
+        $dynamicImage->delete();
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Business section updated successfully',
-            'data' => $section
-        ], 200);
-    }
-
-    // Delete a section (Admin Only)
-    public function destroy($id) {
-        if (!auth()->user() || !auth()->user()->isAdmin()) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Unauthorized',
-                'data' => null
-            ], 403);
-        }
-
-        $section = BusinessDetail::find($id);
-        if (!$section) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Section not found',
-                'data' => null
-            ], 404);
-        }
-
-        $section->delete();
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Business section deleted successfully',
-            'data' => null
+            'message' => 'Image deleted successfully'
         ], 200);
     }
 }
+
