@@ -149,6 +149,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('knitting-unit', [BusinessOverviewController::class, 'getKnittingUnit']); // Fetch knitting unit
         Route::post('knitting-unit', [BusinessOverviewController::class, 'updateKnittingUnit']); // Update knitting unit
 
+        Route::get('garment-unit', [BusinessOverviewController::class, 'getGarmentUnit']); // Fetch garment unit
+        Route::post('garment-unit', [BusinessOverviewController::class, 'updateGarmentUnit']); // Update garment unit
+
     });
 });
 
@@ -183,6 +186,7 @@ Route::prefix('client')->group(function () {
     Route::get('business-product-images', [BusinessOverviewController::class, 'getDynamicImages']);
     Route::get('business-materials', [BusinessOverviewController::class, 'getBusinessMaterials']);
     Route::get('knitting-unit', [BusinessOverviewController::class, 'getKnittingUnit']); // Fetch knitting unit
+    Route::get('garment-unit', [BusinessOverviewController::class, 'getGarmentUnit']); // Fetch garment unit
 
 });
 
