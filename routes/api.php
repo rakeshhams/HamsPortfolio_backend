@@ -160,6 +160,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('multiple-units/{id}', [BusinessOverviewController::class, 'updateMultipleUnit']); // Update a multiple unit
         Route::delete('multiple-units/{id}', [BusinessOverviewController::class, 'deleteMultipleUnit']); // Delete a multiple unit
 
+        Route::get('dyeing-units', [BusinessOverviewController::class, 'getDyeingUnits']); // Fetch all dyeing units
+        Route::post('dyeing-units', [BusinessOverviewController::class, 'createDyeingUnit']); // Create a dyeing unit
+        Route::post('dyeing-units/{id}', [BusinessOverviewController::class, 'updateDyeingUnit']); // Update a dyeing unit
+        Route::delete('dyeing-units/{id}', [BusinessOverviewController::class, 'deleteDyeingUnit']); // Delete a dyeing unit
+
     });
 });
 
@@ -197,6 +202,7 @@ Route::prefix('client')->group(function () {
     Route::get('garment-unit', [BusinessOverviewController::class, 'getGarmentUnit']); // Fetch garment unit
     Route::get('sustainability-unit', [BusinessOverviewController::class, 'getSustainabilityUnit']); // Fetch sustainability unit
     Route::get('multiple-units', [BusinessOverviewController::class, 'getMultipleUnits']); // Fetch list of multiple units
+    Route::get('dyeing-units', [BusinessOverviewController::class, 'getDyeingUnits']); // Fetch all dyeing units
 
 });
 

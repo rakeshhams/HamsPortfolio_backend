@@ -11,6 +11,7 @@ use App\Models\BusinessKnittingUnit;
 use App\Models\BusinessGarmentUnit;
 use App\Models\BusinessSustainabilityUnit;
 use App\Models\BusinessMultipleUnit;
+use App\Models\BusinessDyeingUnit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -537,6 +538,109 @@ class BusinessOverviewController extends Controller
         ], 200);
     }
 
+    // Dyeing Units: Fetch All
+    public function getDyeingUnits()
+    {
+        $dyeingUnits = BusinessDyeingUnit::all();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Dyeing units retrieved successfully',
+            'data' => $dyeingUnits
+        ], 200);
+    }
+
+    // Dyeing Units: Create
+    public function createDyeingUnit(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation errors',
+                'errors' => $validator->errors()
+            ], 400);
+        }
+
+        $data = $request->only('title', 'description');
+        if ($request->hasFile('image')) {
+            $data['image'] = $this->imageUpload($request, 'image', 'dyeing_units');
+        }
+
+        $dyeingUnit = BusinessDyeingUnit::create($data);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Dyeing unit created successfully',
+            'data' => $dyeingUnit
+        ], 201);
+    }
+
+    // Dyeing Units: Update
+    public function updateDyeingUnit(Request $request, $id)
+    {
+        $dyeingUnit = BusinessDyeingUnit::find($id);
+
+        if (!$dyeingUnit) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Unit not found'
+            ], 404);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation errors',
+                'errors' => $validator->errors()
+            ], 400);
+        }
+
+        $dyeingUnit->fill($request->only('title', 'description'));
+
+        if ($request->hasFile('image')) {
+            $dyeingUnit->image = $this->imageUpload($request, 'image', 'dyeing_units');
+        }
+
+        $dyeingUnit->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Dyeing unit updated successfully',
+            'data' => $dyeingUnit
+        ], 200);
+    }
+
+    // Dyeing Units: Delete
+    public function deleteDyeingUnit($id)
+    {
+        $dyeingUnit = BusinessDyeingUnit::find($id);
+
+        if (!$dyeingUnit) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Unit not found'
+            ], 404);
+        }
+
+        $dyeingUnit->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Dyeing unit deleted successfully'
+        ], 200);
+    }
 
 
     /**
