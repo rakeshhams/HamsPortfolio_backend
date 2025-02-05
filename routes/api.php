@@ -128,17 +128,19 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
         //Business Overview 
         // Hero Section
-        Route::get('hero-section', [BusinessOverviewController::class, 'getHeroSection']);
-        Route::post('hero-section', [BusinessOverviewController::class, 'updateHeroSection']);
+        Route::get('business_hero-section', [BusinessOverviewController::class, 'getHeroSection']);
+        Route::post('business_hero-section', [BusinessOverviewController::class, 'updateHeroSection']);
 
         // Dynamic Image Section Metadata
-        Route::get('dynamic-image-section', [BusinessOverviewController::class, 'getDynamicImageSection']);
-        Route::post('dynamic-image-section', [BusinessOverviewController::class, 'updateDynamicImageSection']);
+        Route::get('business-product-information-section', [BusinessOverviewController::class, 'getDynamicImageSection']);
+        Route::post('business-product-information-section', [BusinessOverviewController::class, 'updateDynamicImageSection']);
 
         // Dynamic Images
         Route::get('dynamic-images', [BusinessOverviewController::class, 'getDynamicImages']);
         Route::post('dynamic-images', [BusinessOverviewController::class, 'createDynamicImage']);
         Route::delete('dynamic-images/{id}', [BusinessOverviewController::class, 'deleteDynamicImage']);
+        Route::post('dynamic-images/{id}', [BusinessOverviewController::class, 'updateDynamicImage']);
+
     });
 });
 
@@ -167,8 +169,11 @@ Route::prefix('client')->group(function () {
     Route::post('subscription', [CommonController::class, 'subscription']);
     // Route::get('business-sections', [BusinessOverviewController::class, 'index']);
 
-    //
-    Route::get('hero-section', [BusinessOverviewController::class, 'getHeroSection']);
+    //Our Business
+    Route::get('business_hero-section', [BusinessOverviewController::class, 'getHeroSection']);
+    Route::get('business-product-information-section', [BusinessOverviewController::class, 'getDynamicImageSection']);
+    Route::get('dynamic-images', [BusinessOverviewController::class, 'getDynamicImages']);
+
 });
 
 // test route

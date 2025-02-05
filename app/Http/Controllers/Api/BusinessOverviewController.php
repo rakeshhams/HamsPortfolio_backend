@@ -11,11 +11,13 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Traits\HelperTrait;
 
-class BusinessOverviewController extends Controller {
+class BusinessOverviewController extends Controller
+{
     use HelperTrait;
 
     // Hero Section: Fetch
-    public function getHeroSection() {
+    public function getHeroSection()
+    {
         $heroSection = BusinessHeroSection::first();
 
         return response()->json([
@@ -26,7 +28,8 @@ class BusinessOverviewController extends Controller {
     }
 
     // Hero Section: Update
-    public function updateHeroSection(Request $request) {
+    public function updateHeroSection(Request $request)
+    {
         $heroSection = BusinessHeroSection::firstOrCreate([]);
 
         $validator = Validator::make($request->all(), [
@@ -60,7 +63,8 @@ class BusinessOverviewController extends Controller {
     }
 
     // Dynamic Image Section Metadata: Fetch
-    public function getDynamicImageSection() {
+    public function getDynamicImageSection()
+    {
         $section = BusinessProductSection::first();
 
         return response()->json([
@@ -71,7 +75,8 @@ class BusinessOverviewController extends Controller {
     }
 
     // Dynamic Image Section Metadata: Update
-    public function updateDynamicImageSection(Request $request) {
+    public function updateDynamicImageSection(Request $request)
+    {
         $section = BusinessProductSection::firstOrCreate([]);
 
         $validator = Validator::make($request->all(), [
@@ -98,7 +103,8 @@ class BusinessOverviewController extends Controller {
     }
 
     // Dynamic Images: Fetch
-    public function getDynamicImages() {
+    public function getDynamicImages()
+    {
         $dynamicImages = BusinessProductImages::all();
 
         return response()->json([
@@ -109,7 +115,8 @@ class BusinessOverviewController extends Controller {
     }
 
     // Dynamic Images: Create
-    public function createDynamicImage(Request $request) {
+    public function createDynamicImage(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
@@ -134,9 +141,49 @@ class BusinessOverviewController extends Controller {
             'data' => $dynamicImage
         ], 201);
     }
+    // Dynamic Images: Update
+    public function updateDynamicImage(Request $request, $id)
+    {
+        $dynamicImage = BusinessProductImages::find($id);
+
+        if (!$dynamicImage) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Image not found'
+            ], 404);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation errors',
+                'errors' => $validator->errors()
+            ], 400);
+        }
+
+        $dynamicImage->title = $request->title;
+
+        if ($request->hasFile('image')) {
+            $dynamicImage->image = $this->imageUpload($request, 'image', 'dynamic_images');
+        }
+
+        $dynamicImage->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Dynamic image updated successfully',
+            'data' => $dynamicImage
+        ], 200);
+    }
 
     // Dynamic Images: Delete
-    public function deleteDynamicImage($id) {
+    public function deleteDynamicImage($id)
+    {
         $dynamicImage = BusinessProductImages::find($id);
 
         if (!$dynamicImage) {
@@ -161,5 +208,5 @@ class BusinessOverviewController extends Controller {
      * @param string $path
      * @return string
      */
-  
+
 }

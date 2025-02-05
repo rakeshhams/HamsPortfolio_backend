@@ -9,4 +9,7 @@ class BusinessProductSection extends Model {
     use HasFactory;
 
     protected $fillable = ['main_title', 'description'];
+
+    // Explicitly define the table name
+    protected $table = 'business_product_section';
 }
