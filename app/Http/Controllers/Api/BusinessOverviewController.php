@@ -9,6 +9,8 @@ use App\Models\BusinessProductImages;
 use App\Models\BusinessMaterial;
 use App\Models\BusinessKnittingUnit;
 use App\Models\BusinessGarmentUnit;
+use App\Models\BusinessSustainabilityUnit;
+use App\Models\BusinessMultipleUnit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -384,6 +386,158 @@ class BusinessOverviewController extends Controller
             'data' => $garmentUnit
         ], 200);
     }
+    // Sustainability Units: Fetch
+    public function getSustainabilityUnit()
+    {
+        $sustainabilityUnit = BusinessSustainabilityUnit::first();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Sustainability unit retrieved successfully',
+            'data' => $sustainabilityUnit
+        ], 200);
+    }
+
+    // Sustainability Units: Update
+    public function updateSustainabilityUnit(Request $request)
+    {
+        $sustainabilityUnit = BusinessSustainabilityUnit::firstOrCreate([]);
+
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation errors',
+                'errors' => $validator->errors()
+            ], 400);
+        }
+
+        $sustainabilityUnit->fill($request->only('title', 'description'));
+
+        if ($request->hasFile('image')) {
+            $sustainabilityUnit->image = $this->imageUpload($request, 'image', 'sustainability_units');
+        }
+
+        $sustainabilityUnit->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Sustainability unit updated successfully',
+            'data' => $sustainabilityUnit
+        ], 200);
+    }
+
+    // Multiple Units: Fetch List
+    public function getMultipleUnits()
+    {
+        $units = BusinessMultipleUnit::all();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Multiple units retrieved successfully',
+            'data' => $units
+        ], 200);
+    }
+
+    // Multiple Units: Create
+    public function createMultipleUnit(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation errors',
+                'errors' => $validator->errors()
+            ], 400);
+        }
+
+        $data = $request->only('title', 'description');
+
+        if ($request->hasFile('image')) {
+            $data['image'] = $this->imageUpload($request, 'image', 'multiple_units');
+        }
+
+        $unit = BusinessMultipleUnit::create($data);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Multiple unit created successfully',
+            'data' => $unit
+        ], 201);
+    }
+
+    // Multiple Units: Update
+    public function updateMultipleUnit(Request $request, $id)
+    {
+        $unit = BusinessMultipleUnit::find($id);
+
+        if (!$unit) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Unit not found'
+            ], 404);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation errors',
+                'errors' => $validator->errors()
+            ], 400);
+        }
+
+        $unit->fill($request->only('title', 'description'));
+
+        if ($request->hasFile('image')) {
+            $unit->image = $this->imageUpload($request, 'image', 'multiple_units');
+        }
+
+        $unit->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Multiple unit updated successfully',
+            'data' => $unit
+        ], 200);
+    }
+
+    // Multiple Units: Delete
+    public function deleteMultipleUnit($id)
+    {
+        $unit = BusinessMultipleUnit::find($id);
+
+        if (!$unit) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Unit not found'
+            ], 404);
+        }
+
+        $unit->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Multiple unit deleted successfully'
+        ], 200);
+    }
+
+
 
     /**
      * Helper method to upload images to storage

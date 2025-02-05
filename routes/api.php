@@ -152,6 +152,14 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('garment-unit', [BusinessOverviewController::class, 'getGarmentUnit']); // Fetch garment unit
         Route::post('garment-unit', [BusinessOverviewController::class, 'updateGarmentUnit']); // Update garment unit
 
+        Route::get('sustainability-unit', [BusinessOverviewController::class, 'getSustainabilityUnit']); // Fetch sustainability unit
+        Route::post('sustainability-unit', [BusinessOverviewController::class, 'updateSustainabilityUnit']); // Update sustainability unit
+
+        Route::get('multiple-units', [BusinessOverviewController::class, 'getMultipleUnits']); // Fetch list of multiple units
+        Route::post('multiple-units', [BusinessOverviewController::class, 'createMultipleUnit']); // Create a multiple unit
+        Route::post('multiple-units/{id}', [BusinessOverviewController::class, 'updateMultipleUnit']); // Update a multiple unit
+        Route::delete('multiple-units/{id}', [BusinessOverviewController::class, 'deleteMultipleUnit']); // Delete a multiple unit
+
     });
 });
 
@@ -187,6 +195,8 @@ Route::prefix('client')->group(function () {
     Route::get('business-materials', [BusinessOverviewController::class, 'getBusinessMaterials']);
     Route::get('knitting-unit', [BusinessOverviewController::class, 'getKnittingUnit']); // Fetch knitting unit
     Route::get('garment-unit', [BusinessOverviewController::class, 'getGarmentUnit']); // Fetch garment unit
+    Route::get('sustainability-unit', [BusinessOverviewController::class, 'getSustainabilityUnit']); // Fetch sustainability unit
+    Route::get('multiple-units', [BusinessOverviewController::class, 'getMultipleUnits']); // Fetch list of multiple units
 
 });
 
