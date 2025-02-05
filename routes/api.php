@@ -141,6 +141,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::delete('business-product-images/{id}', [BusinessOverviewController::class, 'deleteDynamicImage']);
         Route::post('business-product-images/{id}', [BusinessOverviewController::class, 'updateDynamicImage']);
 
+        Route::get('business-materials', [BusinessOverviewController::class, 'getBusinessMaterials']); // Fetch all
+        Route::post('business-materials', [BusinessOverviewController::class, 'createBusinessMaterial']); // Create
+        Route::post('business-materials/{id}', [BusinessOverviewController::class, 'updateBusinessMaterial']); // Update
+        Route::delete('business-materials/{id}', [BusinessOverviewController::class, 'deleteBusinessMaterial']); // Delete
+
     });
 });
 
@@ -173,7 +178,7 @@ Route::prefix('client')->group(function () {
     Route::get('business_hero-section', [BusinessOverviewController::class, 'getHeroSection']);
     Route::get('business-product-information-section', [BusinessOverviewController::class, 'getDynamicImageSection']);
     Route::get('business-product-images', [BusinessOverviewController::class, 'getDynamicImages']);
-
+    Route::get('business-materials', [BusinessOverviewController::class, 'getBusinessMaterials']);
 });
 
 // test route

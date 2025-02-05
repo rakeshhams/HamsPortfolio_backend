@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\BusinessHeroSection;
 use App\Models\BusinessProductSection;
 use App\Models\BusinessProductImages;
+use App\Models\BusinessMaterial;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -198,6 +199,97 @@ class BusinessOverviewController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Image deleted successfully'
+        ], 200);
+    }
+
+    // Business Material: Fetch All
+    public function getBusinessMaterials()
+    {
+        $materials = BusinessMaterial::all();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Business materials retrieved successfully',
+            'data' => $materials
+        ], 200);
+    }
+
+    // Business Material: Create
+    public function createBusinessMaterial(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation errors',
+                'errors' => $validator->errors()
+            ], 400);
+        }
+
+        $material = BusinessMaterial::create($request->only('title', 'description'));
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Business material created successfully',
+            'data' => $material
+        ], 201);
+    }
+
+    // Business Material: Update
+    public function updateBusinessMaterial(Request $request, $id)
+    {
+        $material = BusinessMaterial::find($id);
+
+        if (!$material) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Material not found'
+            ], 404);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation errors',
+                'errors' => $validator->errors()
+            ], 400);
+        }
+
+        $material->update($request->only('title', 'description'));
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Business material updated successfully',
+            'data' => $material
+        ], 200);
+    }
+
+    // Business Material: Delete
+    public function deleteBusinessMaterial($id)
+    {
+        $material = BusinessMaterial::find($id);
+
+        if (!$material) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Material not found'
+            ], 404);
+        }
+
+        $material->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Business material deleted successfully'
         ], 200);
     }
 
