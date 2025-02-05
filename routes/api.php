@@ -135,11 +135,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('business-product-information-section', [BusinessOverviewController::class, 'getDynamicImageSection']);
         Route::post('business-product-information-section', [BusinessOverviewController::class, 'updateDynamicImageSection']);
 
-        // Dynamic Images
-        Route::get('dynamic-images', [BusinessOverviewController::class, 'getDynamicImages']);
-        Route::post('dynamic-images', [BusinessOverviewController::class, 'createDynamicImage']);
-        Route::delete('dynamic-images/{id}', [BusinessOverviewController::class, 'deleteDynamicImage']);
-        Route::post('dynamic-images/{id}', [BusinessOverviewController::class, 'updateDynamicImage']);
+        //Product Dynamic Images
+        Route::get('business-product-images', [BusinessOverviewController::class, 'getDynamicImages']);
+        Route::post('business-product-images', [BusinessOverviewController::class, 'createDynamicImage']);
+        Route::delete('business-product-images/{id}', [BusinessOverviewController::class, 'deleteDynamicImage']);
+        Route::post('business-product-images/{id}', [BusinessOverviewController::class, 'updateDynamicImage']);
 
     });
 });
@@ -172,7 +172,7 @@ Route::prefix('client')->group(function () {
     //Our Business
     Route::get('business_hero-section', [BusinessOverviewController::class, 'getHeroSection']);
     Route::get('business-product-information-section', [BusinessOverviewController::class, 'getDynamicImageSection']);
-    Route::get('dynamic-images', [BusinessOverviewController::class, 'getDynamicImages']);
+    Route::get('business-product-images', [BusinessOverviewController::class, 'getDynamicImages']);
 
 });
 
