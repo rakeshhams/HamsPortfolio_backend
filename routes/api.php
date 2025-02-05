@@ -182,6 +182,8 @@ Route::prefix('client')->group(function () {
     Route::get('business-product-information-section', [BusinessOverviewController::class, 'getDynamicImageSection']);
     Route::get('business-product-images', [BusinessOverviewController::class, 'getDynamicImages']);
     Route::get('business-materials', [BusinessOverviewController::class, 'getBusinessMaterials']);
+    Route::get('knitting-unit', [BusinessOverviewController::class, 'getKnittingUnit']); // Fetch knitting unit
+
 });
 
 // test route
