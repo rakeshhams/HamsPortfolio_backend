@@ -7,9 +7,12 @@ use App\Models\BusinessHeroSection;
 use App\Models\BusinessProductSection;
 use App\Models\BusinessProductImages;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Traits\HelperTrait;
 
 class BusinessOverviewController extends Controller {
+    use HelperTrait;
 
     // Hero Section: Fetch
     public function getHeroSection() {
@@ -40,11 +43,11 @@ class BusinessOverviewController extends Controller {
         $heroSection->fill($request->only('title', 'description'));
 
         if ($request->hasFile('hero_image')) {
-            $heroSection->hero_image = $request->file('hero_image')->store('hero_images', 'public');
+            $heroSection->hero_image = $this->imageUpload($request, 'hero_image', 'hero_images');
         }
 
         if ($request->hasFile('additional_image')) {
-            $heroSection->additional_image = $request->file('additional_image')->store('hero_images', 'public');
+            $heroSection->additional_image = $this->imageUpload($request, 'additional_image', 'hero_images');
         }
 
         $heroSection->save();
@@ -121,7 +124,7 @@ class BusinessOverviewController extends Controller {
         }
 
         $data = $request->only('title');
-        $data['image'] = $request->file('image')->store('dynamic_images', 'public');
+        $data['image'] = $this->imageUpload($request, 'image', 'dynamic_images');
 
         $dynamicImage = BusinessProductImages::create($data);
 
@@ -150,5 +153,13 @@ class BusinessOverviewController extends Controller {
             'message' => 'Image deleted successfully'
         ], 200);
     }
-}
 
+    /**
+     * Helper method to upload images to storage
+     * @param Request $request
+     * @param string $field
+     * @param string $path
+     * @return string
+     */
+  
+}
