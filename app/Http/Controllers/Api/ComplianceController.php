@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ComplianceCommonInformation;
 use App\Models\ComplianceMilestone;
 use App\Models\ComplianceActivity;
+use App\Models\ComplianceCsrInfo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Traits\HelperTrait;
@@ -167,110 +168,150 @@ class ComplianceController extends Controller
     }
 
 
-     // Fetch All Compliance Activities
-     public function getAllComplianceActivities()
-     {
-         $activities = ComplianceActivity::all();
- 
-         return response()->json([
-             'status' => 'success',
-             'message' => 'Compliance Activities retrieved successfully',
-             'data' => $activities,
-         ], 200);
-     }
- 
-     // Create Compliance Activity
-     public function createComplianceActivity(Request $request)
-     {
-         $validator = Validator::make($request->all(), [
-             'title' => 'required|string|max:255',
-             'description' => 'nullable|string',
-             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-         ]);
- 
-         if ($validator->fails()) {
-             return response()->json([
-                 'status' => 'error',
-                 'message' => 'Validation errors',
-                 'errors' => $validator->errors(),
-             ], 400);
-         }
- 
-         $data = $request->only('title', 'description');
- 
-         if ($request->hasFile('image')) {
-             $data['image'] = $this->imageUpload($request, 'image', 'compliance_activities');
-         }
- 
-         $activity = ComplianceActivity::create($data);
- 
-         return response()->json([
-             'status' => 'success',
-             'message' => 'Compliance Activity created successfully',
-             'data' => $activity,
-         ], 201);
-     }
- 
-     // Update Compliance Activity
-     public function updateComplianceActivity(Request $request, $id)
-     {
-         $activity = ComplianceActivity::find($id);
- 
-         if (!$activity) {
-             return response()->json([
-                 'status' => 'error',
-                 'message' => 'Activity not found',
-             ], 404);
-         }
- 
-         $validator = Validator::make($request->all(), [
-             'title' => 'required|string|max:255',
-             'description' => 'nullable|string',
-             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-         ]);
- 
-         if ($validator->fails()) {
-             return response()->json([
-                 'status' => 'error',
-                 'message' => 'Validation errors',
-                 'errors' => $validator->errors(),
-             ], 400);
-         }
- 
-         $activity->fill($request->only('title', 'description'));
- 
-         if ($request->hasFile('image')) {
-             $activity->image = $this->imageUpload($request, 'image', 'compliance_activities');
-         }
- 
-         $activity->save();
- 
-         return response()->json([
-             'status' => 'success',
-             'message' => 'Compliance Activity updated successfully',
-             'data' => $activity,
-         ], 200);
-     }
- 
-     // Delete Compliance Activity
-     public function deleteComplianceActivity($id)
-     {
-         $activity = ComplianceActivity::find($id);
- 
-         if (!$activity) {
-             return response()->json([
-                 'status' => 'error',
-                 'message' => 'Activity not found',
-             ], 404);
-         }
- 
-         $activity->delete();
- 
-         return response()->json([
-             'status' => 'success',
-             'message' => 'Compliance Activity deleted successfully',
-         ], 200);
-     }
+    // Fetch All Compliance Activities
+    public function getAllComplianceActivities()
+    {
+        $activities = ComplianceActivity::all();
 
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Compliance Activities retrieved successfully',
+            'data' => $activities,
+        ], 200);
+    }
 
+    // Create Compliance Activity
+    public function createComplianceActivity(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation errors',
+                'errors' => $validator->errors(),
+            ], 400);
+        }
+
+        $data = $request->only('title', 'description');
+
+        if ($request->hasFile('image')) {
+            $data['image'] = $this->imageUpload($request, 'image', 'compliance_activities');
+        }
+
+        $activity = ComplianceActivity::create($data);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Compliance Activity created successfully',
+            'data' => $activity,
+        ], 201);
+    }
+
+    // Update Compliance Activity
+    public function updateComplianceActivity(Request $request, $id)
+    {
+        $activity = ComplianceActivity::find($id);
+
+        if (!$activity) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Activity not found',
+            ], 404);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation errors',
+                'errors' => $validator->errors(),
+            ], 400);
+        }
+
+        $activity->fill($request->only('title', 'description'));
+
+        if ($request->hasFile('image')) {
+            $activity->image = $this->imageUpload($request, 'image', 'compliance_activities');
+        }
+
+        $activity->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Compliance Activity updated successfully',
+            'data' => $activity,
+        ], 200);
+    }
+
+    // Delete Compliance Activity
+    public function deleteComplianceActivity($id)
+    {
+        $activity = ComplianceActivity::find($id);
+
+        if (!$activity) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Activity not found',
+            ], 404);
+        }
+
+        $activity->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Compliance Activity deleted successfully',
+        ], 200);
+    }
+
+    // Fetch Compliance CSR Info
+    public function getComplianceCsrInfo()
+    {
+        $csrInfo = ComplianceCsrInfo::first();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Compliance CSR Information retrieved successfully',
+            'data' => $csrInfo,
+        ], 200);
+    }
+
+    // Update Compliance CSR Info
+    public function updateComplianceCsrInfo(Request $request)
+    {
+        $csrInfo = ComplianceCsrInfo::firstOrCreate([]);
+
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:255',
+            'description_one' => 'nullable|string',
+            'description_two' => 'nullable|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation errors',
+                'errors' => $validator->errors(),
+            ], 400);
+        }
+
+        // Update fields
+        $csrInfo->fill($request->only('title', 'description_one', 'description_two'));
+        $csrInfo->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Compliance CSR Information updated successfully',
+            'data' => $csrInfo,
+        ], 200);
+    }
 }

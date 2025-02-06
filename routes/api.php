@@ -207,6 +207,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('compliance/activities', [ComplianceController::class, 'createComplianceActivity']); // Create Compliance Activity
         Route::post('compliance/activities/{id}', [ComplianceController::class, 'updateComplianceActivity']); // Update Compliance Activity
         Route::delete('compliance/activities/{id}', [ComplianceController::class, 'deleteComplianceActivity']); // Delete Compliance Activity
+
+        Route::get('compliance/csr-info', [ComplianceController::class, 'getComplianceCsrInfo']); // Fetch Compliance CSR Info
+        Route::post('compliance/csr-info', [ComplianceController::class, 'updateComplianceCsrInfo']); // Update Compliance CSR Info
     });
 });
 
@@ -260,6 +263,8 @@ Route::prefix('client')->group(function () {
     Route::get('compliance/common-info', [ComplianceController::class, 'getComplianceInfo']); // Fetch Compliance Info
     Route::get('compliance/milestones', [ComplianceController::class, 'getAllComplianceMilestones']); // Fetch all Compliance Milestones
     Route::get('compliance/activities', [ComplianceController::class, 'getAllComplianceActivities']); // Fetch all Compliance Activities
+
+    Route::get('compliance/csr-info', [ComplianceController::class, 'getComplianceCsrInfo']); // Fetch Compliance CSR Info
 
 
 });
