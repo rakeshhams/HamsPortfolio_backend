@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\NewsAndEventController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\BusinessOverviewController;
 use App\Http\Controllers\Api\ComplianceController;
+use App\Http\Controllers\Api\EmployeeController;
 
 
 use App\Models\User;
@@ -210,6 +211,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
         Route::get('compliance/csr-info', [ComplianceController::class, 'getComplianceCsrInfo']); // Fetch Compliance CSR Info
         Route::post('compliance/csr-info', [ComplianceController::class, 'updateComplianceCsrInfo']); // Update Compliance CSR Info
+
+        //Employee First
+        Route::get('employee/common-info', [EmployeeController::class, 'getEmployeeCommonInfo']); // Fetch Employee Common Info
+        Route::post('employee/common-info', [EmployeeController::class, 'updateEmployeeCommonInfo']); // Update Employee Common Info
     });
 });
 
@@ -266,6 +271,7 @@ Route::prefix('client')->group(function () {
 
     Route::get('compliance/csr-info', [ComplianceController::class, 'getComplianceCsrInfo']); // Fetch Compliance CSR Info
 
+    Route::get('employee/common-info', [EmployeeController::class, 'getEmployeeCommonInfo']); // Fetch Employee Common Info
 
 });
 
