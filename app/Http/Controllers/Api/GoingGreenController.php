@@ -7,6 +7,7 @@ use App\Models\GoingGreenHeroSection;
 use App\Models\GreenEnvironmentalImpact;
 use App\Models\GreenCommunity;
 use App\Models\GreenInnovation;
+use App\Models\GreenConclusion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Traits\HelperTrait;
@@ -210,6 +211,53 @@ class GoingGreenController extends Controller
             'status' => 'success',
             'message' => 'Green Innovation updated successfully',
             'data' => $greenInnovation,
+        ], 200);
+    }
+
+    // Fetch Green Conclusion Data
+    public function getGreenConclusion()
+    {
+        $greenConclusion = GreenConclusion::first();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Green Conclusion data retrieved successfully',
+            'data' => $greenConclusion,
+        ], 200);
+    }
+
+    // Update Green Conclusion Data
+    public function updateGreenConclusion(Request $request)
+    {
+        $greenConclusion = GreenConclusion::firstOrCreate([]);
+
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'file' => 'nullable|mimes:pdf|max:5120', // Allow only PDF, max 5MB
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation errors',
+                'errors' => $validator->errors(),
+            ], 400);
+        }
+
+        // Update fields
+        $greenConclusion->fill($request->only('title', 'description'));
+
+        if ($request->hasFile('file')) {
+            $greenConclusion->file = $this->imageUpload($request, 'file', 'green_conclusion_pdfs');
+        }
+
+        $greenConclusion->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Green Conclusion updated successfully',
+            'data' => $greenConclusion,
         ], 200);
     }
 
