@@ -220,6 +220,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('employee/stories', [EmployeeController::class, 'createEmployeeStory']); // Create Employee Story
         Route::post('employee/stories/{id}', [EmployeeController::class, 'updateEmployeeStory']); // Update Employee Story
         Route::delete('employee/stories/{id}', [EmployeeController::class, 'deleteEmployeeStory']); // Delete Employee Story
+
+        Route::get('employee/feedback', action: [EmployeeController::class, 'getAllEmployeeFeedbacks']); // Fetch all Employee Feedback
+        Route::post('employee/feedback', [EmployeeController::class, 'createEmployeeFeedback']); // Create Employee Feedback
+        Route::post('employee/feedback/{id}', [EmployeeController::class, 'updateEmployeeFeedback']); // Update Employee Feedback
+        Route::delete('employee/feedback/{id}', [EmployeeController::class, 'deleteEmployeeFeedback']); // Delete Employee Feedback
     });
 });
 
@@ -279,6 +284,9 @@ Route::prefix('client')->group(function () {
     Route::get('employee/common-info', [EmployeeController::class, 'getEmployeeCommonInfo']); // Fetch Employee Common Info
 
     Route::get('employee/stories', [EmployeeController::class, 'getAllEmployeeStories']); // Fetch all Employee Stories
+
+    Route::get('employee/feedback', action: [EmployeeController::class, 'getAllEmployeeFeedbacks']); // Fetch all Employee Feedback
+
 
 });
 
