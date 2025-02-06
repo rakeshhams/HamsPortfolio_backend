@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\NewsAndEventController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\BusinessOverviewController;
 use App\Http\Controllers\Api\ComplianceController;
+use App\Http\Controllers\Api\EmployeeController;
 
 
 use App\Models\User;
@@ -210,6 +211,20 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
         Route::get('compliance/csr-info', [ComplianceController::class, 'getComplianceCsrInfo']); // Fetch Compliance CSR Info
         Route::post('compliance/csr-info', [ComplianceController::class, 'updateComplianceCsrInfo']); // Update Compliance CSR Info
+
+        //Employee First
+        Route::get('employee/common-info', [EmployeeController::class, 'getEmployeeCommonInfo']); // Fetch Employee Common Info
+        Route::post('employee/common-info', [EmployeeController::class, 'updateEmployeeCommonInfo']); // Update Employee Common Info
+
+        Route::get('employee/stories', [EmployeeController::class, 'getAllEmployeeStories']); // Fetch all Employee Stories
+        Route::post('employee/stories', [EmployeeController::class, 'createEmployeeStory']); // Create Employee Story
+        Route::post('employee/stories/{id}', [EmployeeController::class, 'updateEmployeeStory']); // Update Employee Story
+        Route::delete('employee/stories/{id}', [EmployeeController::class, 'deleteEmployeeStory']); // Delete Employee Story
+
+        Route::get('employee/feedback', action: [EmployeeController::class, 'getAllEmployeeFeedbacks']); // Fetch all Employee Feedback
+        Route::post('employee/feedback', [EmployeeController::class, 'createEmployeeFeedback']); // Create Employee Feedback
+        Route::post('employee/feedback/{id}', [EmployeeController::class, 'updateEmployeeFeedback']); // Update Employee Feedback
+        Route::delete('employee/feedback/{id}', [EmployeeController::class, 'deleteEmployeeFeedback']); // Delete Employee Feedback
     });
 });
 
@@ -265,6 +280,12 @@ Route::prefix('client')->group(function () {
     Route::get('compliance/activities', [ComplianceController::class, 'getAllComplianceActivities']); // Fetch all Compliance Activities
 
     Route::get('compliance/csr-info', [ComplianceController::class, 'getComplianceCsrInfo']); // Fetch Compliance CSR Info
+
+    Route::get('employee/common-info', [EmployeeController::class, 'getEmployeeCommonInfo']); // Fetch Employee Common Info
+
+    Route::get('employee/stories', [EmployeeController::class, 'getAllEmployeeStories']); // Fetch all Employee Stories
+
+    Route::get('employee/feedback', action: [EmployeeController::class, 'getAllEmployeeFeedbacks']); // Fetch all Employee Feedback
 
 
 });
