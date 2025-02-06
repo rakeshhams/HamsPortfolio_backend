@@ -197,6 +197,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         //Compliance and csr
         Route::get('compliance/common-info', [ComplianceController::class, 'getComplianceInfo']); // Fetch Compliance Info
         Route::post('compliance/common-info', [ComplianceController::class, 'updateComplianceInfo']); // Update Compliance Info
+
+        Route::get('compliance/milestones', [ComplianceController::class, 'getAllComplianceMilestones']); // Fetch all Compliance Milestones
+        Route::post('compliance/milestones', [ComplianceController::class, 'createComplianceMilestone']); // Create Compliance Milestone
+        Route::post('compliance/milestones/{id}', [ComplianceController::class, 'updateComplianceMilestone']); // Update Compliance Milestone
+        Route::delete('compliance/milestones/{id}', [ComplianceController::class, 'deleteComplianceMilestone']); // Delete Compliance Milestone
     });
 });
 
@@ -248,6 +253,7 @@ Route::prefix('client')->group(function () {
 
     Route::get('green/responsibility', [GoingGreenController::class, 'getAllGreenResponsibilities']); // Fetch all Green Responsibilities
     Route::get('compliance/common-info', [ComplianceController::class, 'getComplianceInfo']); // Fetch Compliance Info
+    Route::get('compliance/milestones', [ComplianceController::class, 'getAllComplianceMilestones']); // Fetch all Compliance Milestones
 
 
 });
