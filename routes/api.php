@@ -2,6 +2,7 @@
 
 
 use App\Http\Controllers\Api\AboutController;
+use App\Http\Controllers\Api\GoingGreenController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
@@ -10,6 +11,7 @@ use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\NewsAndEventController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\BusinessOverviewController;
+
 
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
@@ -165,6 +167,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('dyeing-units/{id}', [BusinessOverviewController::class, 'updateDyeingUnit']); // Update a dyeing unit
         Route::delete('dyeing-units/{id}', [BusinessOverviewController::class, 'deleteDyeingUnit']); // Delete a dyeing unit
 
+        Route::get('going-green/hero-section', [GoingGreenController::class, 'getHeroSection']); // Fetch Going Green Hero Section
+        Route::post('going-green/hero-section', [GoingGreenController::class, 'updateHeroSection']); // Update Going Green Hero Section
+
     });
 });
 
@@ -203,7 +208,8 @@ Route::prefix('client')->group(function () {
     Route::get('sustainability-unit', [BusinessOverviewController::class, 'getSustainabilityUnit']); // Fetch sustainability unit
     Route::get('multiple-units', [BusinessOverviewController::class, 'getMultipleUnits']); // Fetch list of multiple units
     Route::get('dyeing-units', [BusinessOverviewController::class, 'getDyeingUnits']); // Fetch all dyeing 
-    
+
+    Route::get('going-green/hero-section', [GoingGreenController::class, 'getHeroSection']); // Fetch Going Green Hero Section
 
 });
 
