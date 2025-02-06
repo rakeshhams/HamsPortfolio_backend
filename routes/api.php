@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\NewsAndEventController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\BusinessOverviewController;
+use App\Http\Controllers\Api\ComplianceController;
 
 
 use App\Models\User;
@@ -192,6 +193,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('green/responsibility', [GoingGreenController::class, 'createGreenResponsibility']); // Create Green Responsibility
         Route::post('green/responsibility/{id}', [GoingGreenController::class, 'updateGreenResponsibility']); // Update Green Responsibility
         Route::delete('green/responsibility/{id}', [GoingGreenController::class, 'deleteGreenResponsibility']); // Delete Green Responsibility
+
+        //Compliance and csr
+        Route::get('compliance/common-info', [ComplianceController::class, 'getComplianceInfo']); // Fetch Compliance Info
+        Route::post('compliance/common-info', [ComplianceController::class, 'updateComplianceInfo']); // Update Compliance Info
     });
 });
 
@@ -242,6 +247,7 @@ Route::prefix('client')->group(function () {
     Route::get('green/messages', [GoingGreenController::class, 'getAllGreenMessages']); // Fetch all Green Messages
 
     Route::get('green/responsibility', [GoingGreenController::class, 'getAllGreenResponsibilities']); // Fetch all Green Responsibilities
+    Route::get('compliance/common-info', [ComplianceController::class, 'getComplianceInfo']); // Fetch Compliance Info
 
 
 });
