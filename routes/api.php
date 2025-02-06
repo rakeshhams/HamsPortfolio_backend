@@ -175,6 +175,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
         Route::get('green/community', [GoingGreenController::class, 'getGreenCommunity']); // Fetch Green Community
         Route::post('green/community', [GoingGreenController::class, 'updateGreenCommunity']); // Update Green Community
+
+        Route::get('green/innovation', [GoingGreenController::class, 'getGreenInnovation']); // Fetch Green Innovation
+        Route::post('green/innovation', [GoingGreenController::class, 'updateGreenInnovation']);
     });
 });
 
@@ -218,6 +221,8 @@ Route::prefix('client')->group(function () {
     Route::get('green/environmental-impact', [GoingGreenController::class, 'getEnvironmentalImpact']); // Fetch Green Environmental Impact
 
     Route::get('green/community', [GoingGreenController::class, 'getGreenCommunity']); // Fetch Green Community
+
+    Route::get('green/innovation', [GoingGreenController::class, 'getGreenInnovation']); 
 });
 
 // test route
