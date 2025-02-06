@@ -167,6 +167,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('dyeing-units/{id}', [BusinessOverviewController::class, 'updateDyeingUnit']); // Update a dyeing unit
         Route::delete('dyeing-units/{id}', [BusinessOverviewController::class, 'deleteDyeingUnit']); // Delete a dyeing unit
 
+        //Going Green
+
         Route::get('going-green/hero-section', [GoingGreenController::class, 'getHeroSection']); // Fetch Going Green Hero Section
         Route::post('going-green/hero-section', [GoingGreenController::class, 'updateHeroSection']); // Update Going Green Hero Section
 
@@ -180,6 +182,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('green/innovation', [GoingGreenController::class, 'updateGreenInnovation']);
         Route::get('green/conclusion', [GoingGreenController::class, 'getGreenConclusion']); // Fetch Green Conclusion
         Route::post('green/conclusion', [GoingGreenController::class, 'updateGreenConclusion']); // Update Green Conclusion
+
+        Route::get('green/messages', [GoingGreenController::class, 'getAllGreenMessages']); // Fetch all Green Messages
+        Route::post('green/messages', [GoingGreenController::class, 'createGreenMessage']); // Create Green Message
+        Route::post('green/messages/{id}', [GoingGreenController::class, 'updateGreenMessage']); // Update Green Message
+        Route::delete('green/messages/{id}', [GoingGreenController::class, 'deleteGreenMessage']); // Delete Green Message
     });
 });
 
@@ -227,6 +234,7 @@ Route::prefix('client')->group(function () {
     Route::get('green/innovation', [GoingGreenController::class, 'getGreenInnovation']); 
 
     Route::get('green/conclusion', [GoingGreenController::class, 'getGreenConclusion']); // Fetch Green Conclusion
+    Route::get('green/messages', [GoingGreenController::class, 'getAllGreenMessages']); // Fetch all Green Messages
 
 });
 

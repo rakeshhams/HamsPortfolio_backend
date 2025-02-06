@@ -8,6 +8,7 @@ use App\Models\GreenEnvironmentalImpact;
 use App\Models\GreenCommunity;
 use App\Models\GreenInnovation;
 use App\Models\GreenConclusion;
+use App\Models\GreenOurMessage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Traits\HelperTrait;
@@ -258,6 +259,97 @@ class GoingGreenController extends Controller
             'status' => 'success',
             'message' => 'Green Conclusion updated successfully',
             'data' => $greenConclusion,
+        ], 200);
+    }
+
+    // Fetch All Green Our Messages
+    public function getAllGreenMessages()
+    {
+        $messages = GreenOurMessage::all();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Green Our Messages retrieved successfully',
+            'data' => $messages,
+        ], 200);
+    }
+
+    // Create Green Our Message
+    public function createGreenMessage(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation errors',
+                'errors' => $validator->errors(),
+            ], 400);
+        }
+
+        $message = GreenOurMessage::create($request->only('title', 'description'));
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Green Our Message created successfully',
+            'data' => $message,
+        ], 201);
+    }
+
+    // Update Green Our Message
+    public function updateGreenMessage(Request $request, $id)
+    {
+        $message = GreenOurMessage::find($id);
+
+        if (!$message) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Message not found',
+            ], 404);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation errors',
+                'errors' => $validator->errors(),
+            ], 400);
+        }
+
+        $message->update($request->only('title', 'description'));
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Green Our Message updated successfully',
+            'data' => $message,
+        ], 200);
+    }
+
+    // Delete Green Our Message
+    public function deleteGreenMessage($id)
+    {
+        $message = GreenOurMessage::find($id);
+
+        if (!$message) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Message not found',
+            ], 404);
+        }
+
+        $message->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Green Our Message deleted successfully',
         ], 200);
     }
 
