@@ -170,6 +170,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('going-green/hero-section', [GoingGreenController::class, 'getHeroSection']); // Fetch Going Green Hero Section
         Route::post('going-green/hero-section', [GoingGreenController::class, 'updateHeroSection']); // Update Going Green Hero Section
 
+        Route::get('green/environmental-impact', [GoingGreenController::class, 'getEnvironmentalImpact']); // Fetch Green Environmental Impact
+        Route::post('green/environmental-impact', [GoingGreenController::class, 'updateEnvironmentalImpact']);
     });
 });
 
@@ -210,6 +212,7 @@ Route::prefix('client')->group(function () {
     Route::get('dyeing-units', [BusinessOverviewController::class, 'getDyeingUnits']); // Fetch all dyeing 
 
     Route::get('going-green/hero-section', [GoingGreenController::class, 'getHeroSection']); // Fetch Going Green Hero Section
+    Route::get('green/environmental-impact', [GoingGreenController::class, 'getEnvironmentalImpact']); // Fetch Green Environmental Impact
 
 });
 
