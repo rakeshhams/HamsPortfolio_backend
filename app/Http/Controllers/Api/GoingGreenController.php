@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\GoingGreenHeroSection;
 use App\Models\GreenEnvironmentalImpact;
+use App\Models\GreenCommunity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Traits\HelperTrait;
@@ -116,6 +117,52 @@ class GoingGreenController extends Controller
             'status' => 'success',
             'message' => 'Green Environmental Impact updated successfully',
             'data' => $environmentalImpact,
+        ], 200);
+    }
+    // Fetch Green Community Data
+    public function getGreenCommunity()
+    {
+        $greenCommunity = GreenCommunity::first();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Green Community data retrieved successfully',
+            'data' => $greenCommunity,
+        ], 200);
+    }
+
+    // Update Green Community Data
+    public function updateGreenCommunity(Request $request)
+    {
+        $greenCommunity = GreenCommunity::firstOrCreate([]);
+
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation errors',
+                'errors' => $validator->errors(),
+            ], 400);
+        }
+
+        // Update fields
+        $greenCommunity->fill($request->only('title', 'description'));
+
+        if ($request->hasFile('image')) {
+            $greenCommunity->image = $this->imageUpload($request, 'image', 'green_community');
+        }
+
+        $greenCommunity->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Green Community updated successfully',
+            'data' => $greenCommunity,
         ], 200);
     }
 
