@@ -187,6 +187,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('green/messages', [GoingGreenController::class, 'createGreenMessage']); // Create Green Message
         Route::post('green/messages/{id}', [GoingGreenController::class, 'updateGreenMessage']); // Update Green Message
         Route::delete('green/messages/{id}', [GoingGreenController::class, 'deleteGreenMessage']); // Delete Green Message
+
+        Route::get('green/responsibility', [GoingGreenController::class, 'getAllGreenResponsibilities']); // Fetch all Green Responsibilities
+        Route::post('green/responsibility', [GoingGreenController::class, 'createGreenResponsibility']); // Create Green Responsibility
+        Route::post('green/responsibility/{id}', [GoingGreenController::class, 'updateGreenResponsibility']); // Update Green Responsibility
+        Route::delete('green/responsibility/{id}', [GoingGreenController::class, 'deleteGreenResponsibility']); // Delete Green Responsibility
     });
 });
 
@@ -231,10 +236,13 @@ Route::prefix('client')->group(function () {
 
     Route::get('green/community', [GoingGreenController::class, 'getGreenCommunity']); // Fetch Green Community
 
-    Route::get('green/innovation', [GoingGreenController::class, 'getGreenInnovation']); 
+    Route::get('green/innovation', [GoingGreenController::class, 'getGreenInnovation']);
 
     Route::get('green/conclusion', [GoingGreenController::class, 'getGreenConclusion']); // Fetch Green Conclusion
     Route::get('green/messages', [GoingGreenController::class, 'getAllGreenMessages']); // Fetch all Green Messages
+
+    Route::get('green/responsibility', [GoingGreenController::class, 'getAllGreenResponsibilities']); // Fetch all Green Responsibilities
+
 
 });
 

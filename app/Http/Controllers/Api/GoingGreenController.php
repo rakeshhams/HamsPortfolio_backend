@@ -9,6 +9,7 @@ use App\Models\GreenCommunity;
 use App\Models\GreenInnovation;
 use App\Models\GreenConclusion;
 use App\Models\GreenOurMessage;
+use App\Models\GreenResponsibility;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Traits\HelperTrait;
@@ -350,6 +351,111 @@ class GoingGreenController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Green Our Message deleted successfully',
+        ], 200);
+    }
+
+    // Fetch All Green Responsibility Entries
+    public function getAllGreenResponsibilities()
+    {
+        $responsibilities = GreenResponsibility::all();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Green Responsibility data retrieved successfully',
+            'data' => $responsibilities,
+        ], 200);
+    }
+
+    // Create Green Responsibility Entry
+    public function createGreenResponsibility(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation errors',
+                'errors' => $validator->errors(),
+            ], 400);
+        }
+
+        $data = $request->only('title', 'description');
+
+        if ($request->hasFile('image')) {
+            $data['image'] = $this->imageUpload($request, 'image', 'green_responsibility');
+        }
+
+        $responsibility = GreenResponsibility::create($data);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Green Responsibility created successfully',
+            'data' => $responsibility,
+        ], 201);
+    }
+
+    // Update Green Responsibility Entry
+    public function updateGreenResponsibility(Request $request, $id)
+    {
+        $responsibility = GreenResponsibility::find($id);
+
+        if (!$responsibility) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Responsibility not found',
+            ], 404);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation errors',
+                'errors' => $validator->errors(),
+            ], 400);
+        }
+
+        $responsibility->fill($request->only('title', 'description'));
+
+        if ($request->hasFile('image')) {
+            $responsibility->image = $this->imageUpload($request, 'image', 'green_responsibility');
+        }
+
+        $responsibility->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Green Responsibility updated successfully',
+            'data' => $responsibility,
+        ], 200);
+    }
+
+    // Delete Green Responsibility Entry
+    public function deleteGreenResponsibility($id)
+    {
+        $responsibility = GreenResponsibility::find($id);
+
+        if (!$responsibility) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Responsibility not found',
+            ], 404);
+        }
+
+        $responsibility->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Green Responsibility deleted successfully',
         ], 200);
     }
 
