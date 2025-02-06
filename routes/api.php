@@ -215,6 +215,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         //Employee First
         Route::get('employee/common-info', [EmployeeController::class, 'getEmployeeCommonInfo']); // Fetch Employee Common Info
         Route::post('employee/common-info', [EmployeeController::class, 'updateEmployeeCommonInfo']); // Update Employee Common Info
+
+        Route::get('employee/stories', [EmployeeController::class, 'getAllEmployeeStories']); // Fetch all Employee Stories
+        Route::post('employee/stories', [EmployeeController::class, 'createEmployeeStory']); // Create Employee Story
+        Route::post('employee/stories/{id}', [EmployeeController::class, 'updateEmployeeStory']); // Update Employee Story
+        Route::delete('employee/stories/{id}', [EmployeeController::class, 'deleteEmployeeStory']); // Delete Employee Story
     });
 });
 
@@ -272,6 +277,8 @@ Route::prefix('client')->group(function () {
     Route::get('compliance/csr-info', [ComplianceController::class, 'getComplianceCsrInfo']); // Fetch Compliance CSR Info
 
     Route::get('employee/common-info', [EmployeeController::class, 'getEmployeeCommonInfo']); // Fetch Employee Common Info
+
+    Route::get('employee/stories', [EmployeeController::class, 'getAllEmployeeStories']); // Fetch all Employee Stories
 
 });
 
