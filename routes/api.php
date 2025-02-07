@@ -242,6 +242,15 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('stories/videos', [StoriesController::class, 'createStoryVideo']); // Create Story Video
         Route::post('stories/videos/{id}', [StoriesController::class, 'updateStoryVideo']); // Update Story Video
         Route::delete('stories/videos/{id}', [StoriesController::class, 'deleteStoryVideo']); // Delete Story Video
+
+        Route::get('stories/categories', [StoriesController::class, 'getAllStoryCategories']); // Fetch all categories with images
+        Route::post('stories/categories', [StoriesController::class, 'createStoryCategory']); // Create category
+        Route::post('stories/categories/{id}', [StoriesController::class, 'updateStoryCategory']); // Update category
+        Route::delete('stories/categories/{id}', [StoriesController::class, 'deleteStoryCategory']); // Delete category
+        Route::post('stories/categories/{categoryId}/images', [StoriesController::class, 'addImageToStoryCategory']); // Add image to category
+
+        Route::post('stories/categories/images/{imageId}', [StoriesController::class, 'updateStoryCategoryImage']); // Update an image
+        Route::delete('stories/categories/images/{imageId}', [StoriesController::class, 'deleteStoryCategoryImage']); // Delete an image
     });
 });
 
@@ -308,6 +317,7 @@ Route::prefix('client')->group(function () {
     Route::get('stories/feature-posts', [StoriesController::class, 'getAllStoryFeaturePosts']); // Fetch all Story Feature Posts
 
     Route::get('stories/videos', [StoriesController::class, 'getAllStoryVideos']); // Fetch all Story Videos
+    Route::get('stories/categories', [StoriesController::class, 'getAllStoryCategories']); // Fetch all categories with images
 
 
 });

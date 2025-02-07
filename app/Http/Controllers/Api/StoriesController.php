@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\StoryRecentPost;
 use App\Models\StoryFeaturePost;
 use App\Models\StoryVideo;
+use App\Models\StoryCategory;
+use App\Models\StoryCategoryImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Traits\HelperTrait;
@@ -319,4 +321,216 @@ class StoriesController extends Controller
             'message' => 'Story Video deleted successfully',
         ], 200);
     }
+
+
+    // Fetch All Story Categories
+    public function getAllStoryCategories()
+    {
+        $categories = StoryCategory::with('images')->get();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Story Categories retrieved successfully',
+            'data' => $categories,
+        ], 200);
+    }
+
+    // Create Story Category
+    public function createStoryCategory(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation errors',
+                'errors' => $validator->errors(),
+            ], 400);
+        }
+
+        $category = StoryCategory::create($request->only('name'));
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Story Category created successfully',
+            'data' => $category,
+        ], 201);
+    }
+
+    // Update Story Category
+    public function updateStoryCategory(Request $request, $id)
+    {
+        $category = StoryCategory::find($id);
+
+        if (!$category) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Category not found',
+            ], 404);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation errors',
+                'errors' => $validator->errors(),
+            ], 400);
+        }
+
+        $category->update($request->only('name'));
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Story Category updated successfully',
+            'data' => $category,
+        ], 200);
+    }
+
+    // Delete Story Category
+    public function deleteStoryCategory($id)
+    {
+        $category = StoryCategory::find($id);
+
+        if (!$category) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Category not found',
+            ], 404);
+        }
+
+        $category->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Story Category deleted successfully',
+        ], 200);
+    }
+
+    // Add Image to Story Category
+public function addImageToStoryCategory(Request $request, $categoryId)
+{
+    // Check if the category exists
+    $category = StoryCategory::find($categoryId);
+
+    if (!$category) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Category not found',
+        ], 404);
+    }
+
+    // Validate the request
+    $validator = Validator::make($request->all(), [
+        'image' => 'required|image|mimes:jpeg,png,jpg,gif',
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Validation errors',
+            'errors' => $validator->errors(),
+        ], 400);
+    }
+
+    // Use the imageUpload helper to handle the file upload
+    if ($request->hasFile('image')) {
+        $imagePath = $this->imageUpload($request, 'image', 'story_category_images');
+
+        // Explicitly create the record using the StoryCategoryImage model
+        $image = StoryCategoryImage::create([
+            'story_category_id' => $categoryId,
+            'image' => $imagePath,
+        ]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Image added to category successfully',
+            'data' => $image,
+        ], 201);
+    }
+
+    // Fallback in case the image is not uploaded
+    return response()->json([
+        'status' => 'error',
+        'message' => 'Image upload failed',
+    ], 500);
+}
+
+// Update an Image in Story Category
+public function updateStoryCategoryImage(Request $request, $imageId)
+{
+    // Find the image by ID
+    $image = StoryCategoryImage::find($imageId);
+
+    if (!$image) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Image not found',
+        ], 404);
+    }
+
+    // Validate the request
+    $validator = Validator::make($request->all(), [
+        'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Validation errors',
+            'errors' => $validator->errors(),
+        ], 400);
+    }
+
+    // Delete the old image from storage
+    if ($image->image) {
+        \Storage::disk('public')->delete($image->image);
+    }
+
+    // Upload the new image using the helper
+    $newImagePath = $this->imageUpload($request, 'image', 'story_category_images');
+
+    // Update the image path in the database
+    $image->update(['image' => $newImagePath]);
+
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Image updated successfully',
+        'data' => $image,
+    ], 200);
+}
+// Delete an Image in Story Category
+public function deleteStoryCategoryImage($imageId)
+{
+    // Find the image by ID
+    $image = StoryCategoryImage::find($imageId);
+
+    if (!$image) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Image not found',
+        ], 404);
+    }
+
+    // Delete the image file from storage
+    if ($image->image) {
+        \Storage::disk('public')->delete($image->image);
+    }
+
+    // Delete the record from the database
+    $image->delete();
+
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Image deleted successfully',
+    ], 200);
+}
+
+
 }
