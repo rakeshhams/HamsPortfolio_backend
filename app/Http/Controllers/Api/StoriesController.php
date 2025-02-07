@@ -8,6 +8,7 @@ use App\Models\StoryFeaturePost;
 use App\Models\StoryVideo;
 use App\Models\StoryCategory;
 use App\Models\StoryCategoryImage;
+use App\Models\StoryCommonInfo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Traits\HelperTrait;
@@ -413,124 +414,172 @@ class StoriesController extends Controller
     }
 
     // Add Image to Story Category
-public function addImageToStoryCategory(Request $request, $categoryId)
-{
-    // Check if the category exists
-    $category = StoryCategory::find($categoryId);
+    public function addImageToStoryCategory(Request $request, $categoryId)
+    {
+        // Check if the category exists
+        $category = StoryCategory::find($categoryId);
 
-    if (!$category) {
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Category not found',
-        ], 404);
-    }
+        if (!$category) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Category not found',
+            ], 404);
+        }
 
-    // Validate the request
-    $validator = Validator::make($request->all(), [
-        'image' => 'required|image|mimes:jpeg,png,jpg,gif',
-    ]);
-
-    if ($validator->fails()) {
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Validation errors',
-            'errors' => $validator->errors(),
-        ], 400);
-    }
-
-    // Use the imageUpload helper to handle the file upload
-    if ($request->hasFile('image')) {
-        $imagePath = $this->imageUpload($request, 'image', 'story_category_images');
-
-        // Explicitly create the record using the StoryCategoryImage model
-        $image = StoryCategoryImage::create([
-            'story_category_id' => $categoryId,
-            'image' => $imagePath,
+        // Validate the request
+        $validator = Validator::make($request->all(), [
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif',
         ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation errors',
+                'errors' => $validator->errors(),
+            ], 400);
+        }
+
+        // Use the imageUpload helper to handle the file upload
+        if ($request->hasFile('image')) {
+            $imagePath = $this->imageUpload($request, 'image', 'story_category_images');
+
+            // Explicitly create the record using the StoryCategoryImage model
+            $image = StoryCategoryImage::create([
+                'story_category_id' => $categoryId,
+                'image' => $imagePath,
+            ]);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Image added to category successfully',
+                'data' => $image,
+            ], 201);
+        }
+
+        // Fallback in case the image is not uploaded
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Image upload failed',
+        ], 500);
+    }
+
+    // Update an Image in Story Category
+    public function updateStoryCategoryImage(Request $request, $imageId)
+    {
+        // Find the image by ID
+        $image = StoryCategoryImage::find($imageId);
+
+        if (!$image) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Image not found',
+            ], 404);
+        }
+
+        // Validate the request
+        $validator = Validator::make($request->all(), [
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation errors',
+                'errors' => $validator->errors(),
+            ], 400);
+        }
+
+        // Delete the old image from storage
+        if ($image->image) {
+            \Storage::disk('public')->delete($image->image);
+        }
+
+        // Upload the new image using the helper
+        $newImagePath = $this->imageUpload($request, 'image', 'story_category_images');
+
+        // Update the image path in the database
+        $image->update(['image' => $newImagePath]);
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Image added to category successfully',
+            'message' => 'Image updated successfully',
             'data' => $image,
-        ], 201);
+        ], 200);
     }
+    // Delete an Image in Story Category
+    public function deleteStoryCategoryImage($imageId)
+    {
+        // Find the image by ID
+        $image = StoryCategoryImage::find($imageId);
 
-    // Fallback in case the image is not uploaded
-    return response()->json([
-        'status' => 'error',
-        'message' => 'Image upload failed',
-    ], 500);
-}
+        if (!$image) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Image not found',
+            ], 404);
+        }
 
-// Update an Image in Story Category
-public function updateStoryCategoryImage(Request $request, $imageId)
-{
-    // Find the image by ID
-    $image = StoryCategoryImage::find($imageId);
+        // Delete the image file from storage
+        if ($image->image) {
+            \Storage::disk('public')->delete($image->image);
+        }
 
-    if (!$image) {
+        // Delete the record from the database
+        $image->delete();
+
         return response()->json([
-            'status' => 'error',
-            'message' => 'Image not found',
-        ], 404);
+            'status' => 'success',
+            'message' => 'Image deleted successfully',
+        ], 200);
     }
+    // Fetch Story Common Info
+    public function getStoryCommonInfo()
+    {
+        $info = StoryCommonInfo::first();
 
-    // Validate the request
-    $validator = Validator::make($request->all(), [
-        'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-    ]);
-
-    if ($validator->fails()) {
         return response()->json([
-            'status' => 'error',
-            'message' => 'Validation errors',
-            'errors' => $validator->errors(),
-        ], 400);
+            'status' => 'success',
+            'message' => 'Story Common Info retrieved successfully',
+            'data' => $info,
+        ], 200);
     }
 
-    // Delete the old image from storage
-    if ($image->image) {
-        \Storage::disk('public')->delete($image->image);
-    }
+    // Update Story Common Info
+    public function updateStoryCommonInfo(Request $request)
+    {
+        // Retrieve the first (or create if it doesn't exist)
+        $info = StoryCommonInfo::firstOrCreate([]);
 
-    // Upload the new image using the helper
-    $newImagePath = $this->imageUpload($request, 'image', 'story_category_images');
+        // Validate the request
+        $validator = Validator::make($request->all(), [
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string',
+            'hero_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
 
-    // Update the image path in the database
-    $image->update(['image' => $newImagePath]);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation errors',
+                'errors' => $validator->errors(),
+            ], 400);
+        }
 
-    return response()->json([
-        'status' => 'success',
-        'message' => 'Image updated successfully',
-        'data' => $image,
-    ], 200);
-}
-// Delete an Image in Story Category
-public function deleteStoryCategoryImage($imageId)
-{
-    // Find the image by ID
-    $image = StoryCategoryImage::find($imageId);
+        // Update the fields
+        $info->fill($request->only('meta_title', 'meta_description'));
 
-    if (!$image) {
+        // Handle image upload
+        if ($request->hasFile('hero_image')) {
+            $info->hero_image = $this->imageUpload($request, 'hero_image', 'story_common_info');
+        }
+
+        $info->save();
+
         return response()->json([
-            'status' => 'error',
-            'message' => 'Image not found',
-        ], 404);
+            'status' => 'success',
+            'message' => 'Story Common Info updated successfully',
+            'data' => $info,
+        ], 200);
     }
-
-    // Delete the image file from storage
-    if ($image->image) {
-        \Storage::disk('public')->delete($image->image);
-    }
-
-    // Delete the record from the database
-    $image->delete();
-
-    return response()->json([
-        'status' => 'success',
-        'message' => 'Image deleted successfully',
-    ], 200);
-}
-
 
 }

@@ -251,6 +251,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
         Route::post('stories/categories/images/{imageId}', [StoriesController::class, 'updateStoryCategoryImage']); // Update an image
         Route::delete('stories/categories/images/{imageId}', [StoriesController::class, 'deleteStoryCategoryImage']); // Delete an image
+
+        Route::get('stories/common-info', [StoriesController::class, 'getStoryCommonInfo']); // Fetch Story Common Info
+        Route::post('stories/common-info', [StoriesController::class, 'updateStoryCommonInfo']); // Update Story Common Info
     });
 });
 
@@ -318,6 +321,7 @@ Route::prefix('client')->group(function () {
 
     Route::get('stories/videos', [StoriesController::class, 'getAllStoryVideos']); // Fetch all Story Videos
     Route::get('stories/categories', [StoriesController::class, 'getAllStoryCategories']); // Fetch all categories with images
+    Route::get('stories/common-info', [StoriesController::class, 'getStoryCommonInfo']); // Fetch Story Common Info
 
 
 });
