@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\StoryRecentPost;
+use App\Models\StoryFeaturePost;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Traits\HelperTrait;
@@ -118,6 +119,111 @@ class StoriesController extends Controller
              'message' => 'Story Recent Post deleted successfully',
          ], 200);
      }
+
+      // Fetch All Story Feature Posts
+    public function getAllStoryFeaturePosts()
+    {
+        $stories = StoryFeaturePost::all();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Story Feature Posts retrieved successfully',
+            'data' => $stories,
+        ], 200);
+    }
+
+    // Create Story Feature Post
+    public function createStoryFeaturePost(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation errors',
+                'errors' => $validator->errors(),
+            ], 400);
+        }
+
+        $data = $request->only('title', 'description');
+
+        if ($request->hasFile('image')) {
+            $data['image'] = $this->imageUpload($request, 'image', 'story_feature_posts');
+        }
+
+        $story = StoryFeaturePost::create($data);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Story Feature Post created successfully',
+            'data' => $story,
+        ], 201);
+    }
+
+    // Update Story Feature Post
+    public function updateStoryFeaturePost(Request $request, $id)
+    {
+        $story = StoryFeaturePost::find($id);
+
+        if (!$story) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Story not found',
+            ], 404);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation errors',
+                'errors' => $validator->errors(),
+            ], 400);
+        }
+
+        $story->fill($request->only('title', 'description'));
+
+        if ($request->hasFile('image')) {
+            $story->image = $this->imageUpload($request, 'image', 'story_feature_posts');
+        }
+
+        $story->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Story Feature Post updated successfully',
+            'data' => $story,
+        ], 200);
+    }
+
+    // Delete Story Feature Post
+    public function deleteStoryFeaturePost($id)
+    {
+        $story = StoryFeaturePost::find($id);
+
+        if (!$story) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Story not found',
+            ], 404);
+        }
+
+        $story->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Story Feature Post deleted successfully',
+        ], 200);
+    }
 
    
 }

@@ -232,6 +232,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('stories/recent-posts', [StoriesController::class, 'createStoryRecentPost']); // Create Story Recent Post
         Route::post('stories/recent-posts/{id}', [StoriesController::class, 'updateStoryRecentPost']); // Update Story Recent Post
         Route::delete('stories/recent-posts/{id}', [StoriesController::class, 'deleteStoryRecentPost']); // Delete Story Recent Post
+
+        Route::get('stories/feature-posts', [StoriesController::class, 'getAllStoryFeaturePosts']); // Fetch all Story Feature Posts
+        Route::post('stories/feature-posts', [StoriesController::class, 'createStoryFeaturePost']); // Create Story Feature Post
+        Route::post('stories/feature-posts/{id}', [StoriesController::class, 'updateStoryFeaturePost']); // Update Story Feature Post
+        Route::delete('stories/feature-posts/{id}', [StoriesController::class, 'deleteStoryFeaturePost']); // Delete Story Feature Post
     });
 });
 
@@ -295,6 +300,7 @@ Route::prefix('client')->group(function () {
     Route::get('employee/feedback', action: [EmployeeController::class, 'getAllEmployeeFeedbacks']); // Fetch all Employee Feedback
 
     Route::get('stories/recent-posts', [StoriesController::class, 'getAllStoryRecentPosts']); // Fetch all Story Recent Posts
+    Route::get('stories/feature-posts', [StoriesController::class, 'getAllStoryFeaturePosts']); // Fetch all Story Feature Posts
 
 
 });
