@@ -237,6 +237,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('stories/feature-posts', [StoriesController::class, 'createStoryFeaturePost']); // Create Story Feature Post
         Route::post('stories/feature-posts/{id}', [StoriesController::class, 'updateStoryFeaturePost']); // Update Story Feature Post
         Route::delete('stories/feature-posts/{id}', [StoriesController::class, 'deleteStoryFeaturePost']); // Delete Story Feature Post
+        
+        Route::get('stories/videos', [StoriesController::class, 'getAllStoryVideos']); // Fetch all Story Videos
+        Route::post('stories/videos', [StoriesController::class, 'createStoryVideo']); // Create Story Video
+        Route::post('stories/videos/{id}', [StoriesController::class, 'updateStoryVideo']); // Update Story Video
+        Route::delete('stories/videos/{id}', [StoriesController::class, 'deleteStoryVideo']); // Delete Story Video
     });
 });
 
@@ -301,6 +306,8 @@ Route::prefix('client')->group(function () {
 
     Route::get('stories/recent-posts', [StoriesController::class, 'getAllStoryRecentPosts']); // Fetch all Story Recent Posts
     Route::get('stories/feature-posts', [StoriesController::class, 'getAllStoryFeaturePosts']); // Fetch all Story Feature Posts
+
+    Route::get('stories/videos', [StoriesController::class, 'getAllStoryVideos']); // Fetch all Story Videos
 
 
 });
