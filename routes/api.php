@@ -274,6 +274,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('about-us/directors', [AboutUsController::class, 'createDirector']);
         Route::post('about-us/directors/{id}', [AboutUsController::class, 'updateDirector']);
         Route::delete('about-us/directors/{id}', [AboutUsController::class, 'deleteDirector']);
+
+        Route::get('about-us/facilities', [AboutUsController::class, 'getAllFacilities']); // Fetch all facilities
+        Route::get('about-us/facilities/{id}', [AboutUsController::class, 'getFacilityById']); // Fetch a single facility by ID
+        Route::post('about-us/facilities', [AboutUsController::class, 'createFacility']); // Create a new facility
+        Route::post('about-us/facilities/{id}', [AboutUsController::class, 'updateFacility']); // Update a facility
+        Route::delete('about-us/facilities/{id}', [AboutUsController::class, 'deleteFacility']); // Delete a facility
     });
 });
 
@@ -346,7 +352,8 @@ Route::prefix('client')->group(function () {
     Route::get('about-us/main', [AboutUsController::class, 'getAboutUsMain']);
     Route::get('about-us/accordions', [AboutUsController::class, 'getAllAccordions']);
     Route::get('about-us/directors', [AboutUsController::class, 'getAllDirectors']);
-
+    Route::get('about-us/facilities', [AboutUsController::class, 'getAllFacilities']); // Fetch all facilities
+    Route::get('about-us/facilities/{id}', [AboutUsController::class, 'getFacilityById']); // Fetch a single facility by ID
 
 
 });

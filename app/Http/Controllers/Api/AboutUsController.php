@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AboutUsMain;
 use App\Models\AboutUsAccordion;
 use App\Models\AboutDirector;
+use App\Models\AboutFacility;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Traits\HelperTrait;
@@ -278,6 +279,152 @@ class AboutUsController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Director deleted successfully',
+        ], 200);
+    }
+
+    // Fetch All Facilities
+    public function getAllFacilities()
+    {
+        $facilities = AboutFacility::all();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Facilities retrieved successfully',
+            'data' => $facilities,
+        ], 200);
+    }
+
+    // Fetch Facility by ID
+    public function getFacilityById($id)
+    {
+        $facility = AboutFacility::find($id);
+
+        if (!$facility) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Facility not found',
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Facility retrieved successfully',
+            'data' => $facility,
+        ], 200);
+    }
+
+    // Create Facility
+    public function createFacility(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:255',
+            'short_description' => 'nullable|string|max:255',
+            'description' => 'nullable|string',
+            'image_one' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image_two' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'link' => 'nullable|url',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation errors',
+                'errors' => $validator->errors(),
+            ], 400);
+        }
+
+        $data = $request->only('title', 'short_description', 'description', 'link');
+
+        if ($request->hasFile('image_one')) {
+            $data['image_one'] = $this->imageUpload($request, 'image_one', 'about_facilities');
+        }
+
+        if ($request->hasFile('image_two')) {
+            $data['image_two'] = $this->imageUpload($request, 'image_two', 'about_facilities');
+        }
+
+        $facility = AboutFacility::create($data);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Facility created successfully',
+            'data' => $facility,
+        ], 201);
+    }
+
+    // Update Facility
+    public function updateFacility(Request $request, $id)
+    {
+        $facility = AboutFacility::find($id);
+
+        if (!$facility) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Facility not found',
+            ], 404);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:255',
+            'short_description' => 'nullable|string|max:255',
+            'description' => 'nullable|string',
+            'image_one' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image_two' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'link' => 'nullable|url',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation errors',
+                'errors' => $validator->errors(),
+            ], 400);
+        }
+
+        $facility->fill($request->only('title', 'short_description', 'description', 'link'));
+
+        if ($request->hasFile('image_one')) {
+            $facility->image_one = $this->imageUpload($request, 'image_one', 'about_facilities');
+        }
+
+        if ($request->hasFile('image_two')) {
+            $facility->image_two = $this->imageUpload($request, 'image_two', 'about_facilities');
+        }
+
+        $facility->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Facility updated successfully',
+            'data' => $facility,
+        ], 200);
+    }
+
+    // Delete Facility
+    public function deleteFacility($id)
+    {
+        $facility = AboutFacility::find($id);
+
+        if (!$facility) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Facility not found',
+            ], 404);
+        }
+
+        if ($facility->image_one) {
+            \Storage::disk('public')->delete($facility->image_one);
+        }
+
+        if ($facility->image_two) {
+            \Storage::disk('public')->delete($facility->image_two);
+        }
+
+        $facility->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Facility deleted successfully',
         ], 200);
     }
 
