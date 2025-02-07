@@ -260,7 +260,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('products/common-info', [StoriesController::class, 'getProductCommonInfo']); // Fetch Product Common Info
         Route::post('products/common-info', [StoriesController::class, 'updateProductCommonInfo']); // Update Product Common Info
 
-        // About Us Main Section
+        // About Us pages Main Section
         Route::get('about-us/main', [AboutUsController::class, 'getAboutUsMain']);
         Route::post('about-us/main', [AboutUsController::class, 'updateAboutUsMain']);
 
@@ -269,6 +269,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('about-us/accordions', [AboutUsController::class, 'createAccordion']);
         Route::post('about-us/accordions/{id}', [AboutUsController::class, 'updateAccordion']);
         Route::delete('about-us/accordions/{id}', [AboutUsController::class, 'deleteAccordion']);
+
+        Route::get('about-us/directors', [AboutUsController::class, 'getAllDirectors']);
+        Route::post('about-us/directors', [AboutUsController::class, 'createDirector']);
+        Route::post('about-us/directors/{id}', [AboutUsController::class, 'updateDirector']);
+        Route::delete('about-us/directors/{id}', [AboutUsController::class, 'deleteDirector']);
     });
 });
 
@@ -340,6 +345,8 @@ Route::prefix('client')->group(function () {
     Route::get('products/common-info', [StoriesController::class, 'getProductCommonInfo']); // Fetch Product Common Info
     Route::get('about-us/main', [AboutUsController::class, 'getAboutUsMain']);
     Route::get('about-us/accordions', [AboutUsController::class, 'getAllAccordions']);
+    Route::get('about-us/directors', [AboutUsController::class, 'getAllDirectors']);
+
 
 
 });
