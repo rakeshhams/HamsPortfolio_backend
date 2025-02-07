@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\BusinessOverviewController;
 use App\Http\Controllers\Api\ComplianceController;
 use App\Http\Controllers\Api\EmployeeController;
 use App\Http\Controllers\Api\StoriesController;
+use App\Http\Controllers\Api\AboutUsController;
 
 
 use App\Models\User;
@@ -237,7 +238,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('stories/feature-posts', [StoriesController::class, 'createStoryFeaturePost']); // Create Story Feature Post
         Route::post('stories/feature-posts/{id}', [StoriesController::class, 'updateStoryFeaturePost']); // Update Story Feature Post
         Route::delete('stories/feature-posts/{id}', [StoriesController::class, 'deleteStoryFeaturePost']); // Delete Story Feature Post
-        
+
         Route::get('stories/videos', [StoriesController::class, 'getAllStoryVideos']); // Fetch all Story Videos
         Route::post('stories/videos', [StoriesController::class, 'createStoryVideo']); // Create Story Video
         Route::post('stories/videos/{id}', [StoriesController::class, 'updateStoryVideo']); // Update Story Video
@@ -258,6 +259,16 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         //product and service
         Route::get('products/common-info', [StoriesController::class, 'getProductCommonInfo']); // Fetch Product Common Info
         Route::post('products/common-info', [StoriesController::class, 'updateProductCommonInfo']); // Update Product Common Info
+
+        // About Us Main Section
+        Route::get('about-us/main', [AboutUsController::class, 'getAboutUsMain']);
+        Route::post('about-us/main', [AboutUsController::class, 'updateAboutUsMain']);
+
+        // Accordions
+        Route::get('about-us/accordions', [AboutUsController::class, 'getAllAccordions']);
+        Route::post('about-us/accordions', [AboutUsController::class, 'createAccordion']);
+        Route::post('about-us/accordions/{id}', [AboutUsController::class, 'updateAccordion']);
+        Route::delete('about-us/accordions/{id}', [AboutUsController::class, 'deleteAccordion']);
     });
 });
 
@@ -327,6 +338,9 @@ Route::prefix('client')->group(function () {
     Route::get('stories/categories', [StoriesController::class, 'getAllStoryCategories']); // Fetch all categories with images
     Route::get('stories/common-info', [StoriesController::class, 'getStoryCommonInfo']); // Fetch Story Common Info
     Route::get('products/common-info', [StoriesController::class, 'getProductCommonInfo']); // Fetch Product Common Info
+    Route::get('about-us/main', [AboutUsController::class, 'getAboutUsMain']);
+    Route::get('about-us/accordions', [AboutUsController::class, 'getAllAccordions']);
+
 
 });
 
