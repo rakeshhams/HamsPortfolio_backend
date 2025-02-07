@@ -254,6 +254,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
         Route::get('stories/common-info', [StoriesController::class, 'getStoryCommonInfo']); // Fetch Story Common Info
         Route::post('stories/common-info', [StoriesController::class, 'updateStoryCommonInfo']); // Update Story Common Info
+
+        //product and service
+        Route::get('products/common-info', [StoriesController::class, 'getProductCommonInfo']); // Fetch Product Common Info
+        Route::post('products/common-info', [StoriesController::class, 'updateProductCommonInfo']); // Update Product Common Info
     });
 });
 
@@ -322,7 +326,7 @@ Route::prefix('client')->group(function () {
     Route::get('stories/videos', [StoriesController::class, 'getAllStoryVideos']); // Fetch all Story Videos
     Route::get('stories/categories', [StoriesController::class, 'getAllStoryCategories']); // Fetch all categories with images
     Route::get('stories/common-info', [StoriesController::class, 'getStoryCommonInfo']); // Fetch Story Common Info
-
+    Route::get('products/common-info', [StoriesController::class, 'getProductCommonInfo']); // Fetch Product Common Info
 
 });
 

@@ -9,6 +9,7 @@ use App\Models\StoryVideo;
 use App\Models\StoryCategory;
 use App\Models\StoryCategoryImage;
 use App\Models\StoryCommonInfo;
+use App\Models\ProductCommonInfo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Traits\HelperTrait;
@@ -581,5 +582,68 @@ class StoriesController extends Controller
             'data' => $info,
         ], 200);
     }
+    // Fetch Product Common Info
+    public function getProductCommonInfo()
+    {
+        $info = ProductCommonInfo::first();
 
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Product Common Info retrieved successfully',
+            'data' => $info,
+        ], 200);
+    }
+
+    // Update Product Common Info
+    public function updateProductCommonInfo(Request $request)
+    {
+        // Retrieve the first (or create if it doesn't exist)
+        $info = ProductCommonInfo::firstOrCreate([]);
+
+        // Validate the request
+        $validator = Validator::make($request->all(), [
+            'hero_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'title' => 'nullable|string|max:255',
+            'description' => 'nullable|string',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string',
+            'product' => 'nullable|integer|min:0',
+            'export' => 'nullable|integer|min:0',
+            'destination' => 'nullable|integer|min:0',
+            'human_impact' => 'nullable|integer|min:0',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation errors',
+                'errors' => $validator->errors(),
+            ], 400);
+        }
+
+        // Update the fields
+        $info->fill($request->only([
+            'title',
+            'description',
+            'meta_title',
+            'meta_description',
+            'product',
+            'export',
+            'destination',
+            'human_impact',
+        ]));
+
+        // Handle image upload
+        if ($request->hasFile('hero_image')) {
+            $info->hero_image = $this->imageUpload($request, 'hero_image', 'product_common_info');
+        }
+
+        $info->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Product Common Info updated successfully',
+            'data' => $info,
+        ], 200);
+    }
 }
