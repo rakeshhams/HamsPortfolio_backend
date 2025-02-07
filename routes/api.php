@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\BusinessOverviewController;
 use App\Http\Controllers\Api\ComplianceController;
 use App\Http\Controllers\Api\EmployeeController;
+use App\Http\Controllers\Api\StoriesController;
 
 
 use App\Models\User;
@@ -225,6 +226,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('employee/feedback', [EmployeeController::class, 'createEmployeeFeedback']); // Create Employee Feedback
         Route::post('employee/feedback/{id}', [EmployeeController::class, 'updateEmployeeFeedback']); // Update Employee Feedback
         Route::delete('employee/feedback/{id}', [EmployeeController::class, 'deleteEmployeeFeedback']); // Delete Employee Feedback
+
+        //News and story new
+        Route::get('stories/recent-posts', [StoriesController::class, 'getAllStoryRecentPosts']); // Fetch all Story Recent Posts
+        Route::post('stories/recent-posts', [StoriesController::class, 'createStoryRecentPost']); // Create Story Recent Post
+        Route::post('stories/recent-posts/{id}', [StoriesController::class, 'updateStoryRecentPost']); // Update Story Recent Post
+        Route::delete('stories/recent-posts/{id}', [StoriesController::class, 'deleteStoryRecentPost']); // Delete Story Recent Post
     });
 });
 
@@ -286,6 +293,8 @@ Route::prefix('client')->group(function () {
     Route::get('employee/stories', [EmployeeController::class, 'getAllEmployeeStories']); // Fetch all Employee Stories
 
     Route::get('employee/feedback', action: [EmployeeController::class, 'getAllEmployeeFeedbacks']); // Fetch all Employee Feedback
+
+    Route::get('stories/recent-posts', [StoriesController::class, 'getAllStoryRecentPosts']); // Fetch all Story Recent Posts
 
 
 });
