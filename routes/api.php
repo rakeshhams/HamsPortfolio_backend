@@ -321,6 +321,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('footer/companies', [FooterController::class, 'createCompany']); // Create a new company
         Route::post('footer/companies/{id}', [FooterController::class, 'updateCompany']); // Update a company
         Route::delete('footer/companies/{id}', [FooterController::class, 'deleteCompany']); // Delete a company
+
+        // Footer Information
+        Route::get('footer/information', [FooterController::class, 'getFooterInformation']); // Fetch footer information
+        Route::post('footer/information', [FooterController::class, 'updateFooterInformation']); // Update footer information
     });
 });
 
@@ -406,6 +410,7 @@ Route::prefix('client')->group(function () {
 
     //Footer
     Route::get('footer/companies', [FooterController::class, 'getAllCompanies']); // Fetch all companies
+    Route::get('footer/information', [FooterController::class, 'getFooterInformation']); // Fetch footer information
 
 
 });

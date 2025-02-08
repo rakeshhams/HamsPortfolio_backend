@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\FooterCompany;
+use App\Models\FooterInformation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Traits\HelperTrait;
@@ -121,5 +122,56 @@ class FooterController extends Controller
         ], 200);
     }
 
+    // Fetch Footer Information
+    public function getFooterInformation()
+    {
+        $footerInfo = FooterInformation::first();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Footer information retrieved successfully',
+            'data' => $footerInfo,
+        ], 200);
+    }
+
+    // Update Footer Information
+    public function updateFooterInformation(Request $request)
+    {
+        $footerInfo = FooterInformation::firstOrCreate([]);
+
+        $validator = Validator::make($request->all(), [
+            'address' => 'nullable|string',
+            'factory_address' => 'nullable|string',
+            'gmail' => 'nullable|email',
+            'social_link_one' => 'nullable|url',
+            'social_link_two' => 'nullable|url',
+            'social_link_three' => 'nullable|url',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation errors',
+                'errors' => $validator->errors(),
+            ], 400);
+        }
+
+        $footerInfo->fill($request->only([
+            'address',
+            'factory_address',
+            'gmail',
+            'social_link_one',
+            'social_link_two',
+            'social_link_three',
+        ]));
+
+        $footerInfo->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Footer information updated successfully',
+            'data' => $footerInfo,
+        ], 200);
+    }
    
 }
