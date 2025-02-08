@@ -299,6 +299,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         // Home About Us
         Route::get('home/about-us', [NewHomeController::class, 'getHomeAboutUs']); // Fetch data
         Route::post('home/about-us', [NewHomeController::class, 'updateHomeAboutUs']); // Update data
+
+        Route::get('home/explore', [NewHomeController::class, 'getHomeExplore']); // Fetch data
+        Route::post('home/explore', [NewHomeController::class, 'updateHomeExplore']); // Update data
     });
 });
 
@@ -377,6 +380,7 @@ Route::prefix('client')->group(function () {
     Route::get('home/business-units/{id}', [NewHomeController::class, 'getBusinessUnitById']); // Fetch a single business unit by ID
     Route::get('home/services', [NewHomeController::class, 'getAllServices']);
     Route::get('home/about-us', [NewHomeController::class, 'getHomeAboutUs']); // Fetch data
+    Route::get('home/explore', [NewHomeController::class, 'getHomeExplore']); // Fetch data
 
 });
 

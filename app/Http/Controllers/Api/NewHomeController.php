@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\HomeBusinessUnit;
 use App\Models\HomeService;
 use App\Models\HomeAboutUs;
+use App\Models\HomeExplore;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Traits\HelperTrait;
@@ -52,8 +53,8 @@ class NewHomeController extends Controller
             'title' => 'required|string|max:255',
             'short_description' => 'nullable|string|max:255',
             'description' => 'nullable|string',
-            'image_one' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'image_two' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image_one' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+            'image_two' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'link' => 'nullable|url',
         ]);
 
@@ -100,8 +101,8 @@ class NewHomeController extends Controller
             'title' => 'required|string|max:255',
             'short_description' => 'nullable|string|max:255',
             'description' => 'nullable|string',
-            'image_one' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'image_two' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image_one' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+            'image_two' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'link' => 'nullable|url',
         ]);
 
@@ -179,7 +180,7 @@ class NewHomeController extends Controller
             'name' => 'nullable|string|max:255',
             'title' => 'nullable|string|max:255',
             'subtitle' => 'nullable|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'description' => 'nullable|string',
         ]);
 
@@ -222,7 +223,7 @@ class NewHomeController extends Controller
             'name' => 'nullable|string|max:255',
             'title' => 'nullable|string|max:255',
             'subtitle' => 'nullable|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'description' => 'nullable|string',
         ]);
 
@@ -299,7 +300,7 @@ class NewHomeController extends Controller
             'description' => 'nullable|string',
             'youtube_link' => 'nullable|url',
             'link' => 'nullable|url',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'experience_count' => 'nullable|integer',
         ]);
 
@@ -333,6 +334,57 @@ class NewHomeController extends Controller
             'status' => 'success',
             'message' => 'Home About Us data updated successfully',
             'data' => $aboutUs,
+        ], 200);
+    }
+
+    // Fetch Home Explore Data
+    public function getHomeExplore()
+    {
+        $explore = HomeExplore::first();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Home Explore data retrieved successfully',
+            'data' => $explore,
+        ], 200);
+    }
+
+    // Update Home Explore Data
+    public function updateHomeExplore(Request $request)
+    {
+        $explore = HomeExplore::firstOrCreate([]);
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'nullable|string|max:255',
+            'title' => 'nullable|string|max:255',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation errors',
+                'errors' => $validator->errors(),
+            ], 400);
+        }
+
+        $explore->fill($request->only([
+            'name',
+            'title',
+            'description',
+        ]));
+
+        if ($request->hasFile('image')) {
+            $explore->image = $this->imageUpload($request, 'image', 'home_explore');
+        }
+
+        $explore->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Home Explore data updated successfully',
+            'data' => $explore,
         ], 200);
     }
 }
