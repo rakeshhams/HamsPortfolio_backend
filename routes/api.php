@@ -295,6 +295,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('home/services', [NewHomeController::class, 'createService']); // Create a new service
         Route::post('home/services/{id}', [NewHomeController::class, 'updateService']); // Update a service
         Route::delete('home/services/{id}', [NewHomeController::class, 'deleteService']); // Delete a service
+
+        // Home About Us
+        Route::get('home/about-us', [NewHomeController::class, 'getHomeAboutUs']); // Fetch data
+        Route::post('home/about-us', [NewHomeController::class, 'updateHomeAboutUs']); // Update data
     });
 });
 
@@ -372,6 +376,8 @@ Route::prefix('client')->group(function () {
     Route::get('home/business-units', [NewHomeController::class, 'getAllBusinessUnits']); // Fetch all business units
     Route::get('home/business-units/{id}', [NewHomeController::class, 'getBusinessUnitById']); // Fetch a single business unit by ID
     Route::get('home/services', [NewHomeController::class, 'getAllServices']);
+    Route::get('home/about-us', [NewHomeController::class, 'getHomeAboutUs']); // Fetch data
+
 });
 
 // test route

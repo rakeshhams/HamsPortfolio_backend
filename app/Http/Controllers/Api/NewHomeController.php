@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\HomeBusinessUnit;
 use App\Models\HomeService;
+use App\Models\HomeAboutUs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Traits\HelperTrait;
@@ -269,6 +270,69 @@ class NewHomeController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Service deleted successfully',
+        ], 200);
+    }
+
+    // Fetch Home About Us Data
+    public function getHomeAboutUs()
+    {
+        $aboutUs = HomeAboutUs::first();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Home About Us data retrieved successfully',
+            'data' => $aboutUs,
+        ], 200);
+    }
+
+    // Update Home About Us Data
+    public function updateHomeAboutUs(Request $request)
+    {
+        $aboutUs = HomeAboutUs::firstOrCreate([]);
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'nullable|string|max:255',
+            'title' => 'nullable|string|max:255',
+            'subtitle' => 'nullable|string|max:255',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string',
+            'description' => 'nullable|string',
+            'youtube_link' => 'nullable|url',
+            'link' => 'nullable|url',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'experience_count' => 'nullable|integer',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation errors',
+                'errors' => $validator->errors(),
+            ], 400);
+        }
+
+        $aboutUs->fill($request->only([
+            'name',
+            'title',
+            'subtitle',
+            'meta_title',
+            'meta_description',
+            'description',
+            'youtube_link',
+            'link',
+            'experience_count',
+        ]));
+
+        if ($request->hasFile('image')) {
+            $aboutUs->image = $this->imageUpload($request, 'image', 'home_about_us');
+        }
+
+        $aboutUs->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Home About Us data updated successfully',
+            'data' => $aboutUs,
         ], 200);
     }
 }
