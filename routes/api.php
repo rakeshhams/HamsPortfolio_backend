@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\ComplianceController;
 use App\Http\Controllers\Api\EmployeeController;
 use App\Http\Controllers\Api\StoriesController;
 use App\Http\Controllers\Api\AboutUsController;
+use App\Http\Controllers\Api\NewHomeController;
 
 
 use App\Models\User;
@@ -280,6 +281,15 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('about-us/facilities', [AboutUsController::class, 'createFacility']); // Create a new facility
         Route::post('about-us/facilities/{id}', [AboutUsController::class, 'updateFacility']); // Update a facility
         Route::delete('about-us/facilities/{id}', [AboutUsController::class, 'deleteFacility']); // Delete a facility
+
+
+        //home page new api 
+        // Home Business Units
+        Route::get('home/business-units', [NewHomeController::class, 'getAllBusinessUnits']); // Fetch all business units
+        Route::get('home/business-units/{id}', [NewHomeController::class, 'getBusinessUnitById']); // Fetch a single business unit by ID
+        Route::post('home/business-units', [NewHomeController::class, 'createBusinessUnit']); // Create a new business unit
+        Route::put('home/business-units/{id}', [NewHomeController::class, 'updateBusinessUnit']); // Update a business unit
+        Route::delete('home/business-units/{id}', [NewHomeController::class, 'deleteBusinessUnit']); // Delete a business unit
     });
 });
 
@@ -354,7 +364,8 @@ Route::prefix('client')->group(function () {
     Route::get('about-us/directors', [AboutUsController::class, 'getAllDirectors']);
     Route::get('about-us/facilities', [AboutUsController::class, 'getAllFacilities']); // Fetch all facilities
     Route::get('about-us/facilities/{id}', [AboutUsController::class, 'getFacilityById']); // Fetch a single facility by ID
-
+    Route::get('home/business-units', [NewHomeController::class, 'getAllBusinessUnits']); // Fetch all business units
+    Route::get('home/business-units/{id}', [NewHomeController::class, 'getBusinessUnitById']); // Fetch a single business unit by ID
 
 });
 
