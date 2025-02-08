@@ -302,6 +302,18 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
         Route::get('home/explore', [NewHomeController::class, 'getHomeExplore']); // Fetch data
         Route::post('home/explore', [NewHomeController::class, 'updateHomeExplore']); // Update data
+
+
+        // Home Virtual Tour Categories
+        Route::get('home/virtual-tour/categories', [NewHomeController::class, 'getAllCategories']); // Fetch all categories with subcategories
+        Route::post('home/virtual-tour/categories', [NewHomeController::class, 'createCategory']); // Create a new category
+        Route::post('home/virtual-tour/categories/{id}', [NewHomeController::class, 'updateCategory']); // Update a category
+        Route::delete('home/virtual-tour/categories/{id}', [NewHomeController::class, 'deleteCategory']); // Delete a category
+
+        // Home Virtual Tour Subcategories
+        Route::post('home/virtual-tour/categories/{categoryId}/subcategories', [NewHomeController::class, 'createSubcategory']);
+        Route::post('home/virtual-tour/subcategories/{id}', [NewHomeController::class, 'updateSubcategory']); // Update a subcategory
+        Route::delete('home/virtual-tour/subcategories/{id}', [NewHomeController::class, 'deleteSubcategory']); // Delete a subcategory
     });
 });
 
@@ -381,6 +393,9 @@ Route::prefix('client')->group(function () {
     Route::get('home/services', [NewHomeController::class, 'getAllServices']);
     Route::get('home/about-us', [NewHomeController::class, 'getHomeAboutUs']); // Fetch data
     Route::get('home/explore', [NewHomeController::class, 'getHomeExplore']); // Fetch data
+
+    // Home Virtual Tour Categories
+    Route::get('home/virtual-tour/categories', [NewHomeController::class, 'getAllCategories']);
 
 });
 

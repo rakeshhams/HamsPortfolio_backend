@@ -7,6 +7,8 @@ use App\Models\HomeBusinessUnit;
 use App\Models\HomeService;
 use App\Models\HomeAboutUs;
 use App\Models\HomeExplore;
+use App\Models\HomeVirtualTourCategory;
+use App\Models\HomeVirtualTourSubcategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Traits\HelperTrait;
@@ -385,6 +387,213 @@ class NewHomeController extends Controller
             'status' => 'success',
             'message' => 'Home Explore data updated successfully',
             'data' => $explore,
+        ], 200);
+    }
+
+    // Fetch All Categories with Subcategories
+    public function getAllCategories()
+    {
+        $categories = HomeVirtualTourCategory::with('subcategories')->get();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Categories and subcategories retrieved successfully',
+            'data' => $categories,
+        ], 200);
+    }
+
+    // Create Category
+    public function createCategory(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'background_image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation errors',
+                'errors' => $validator->errors(),
+            ], 400);
+        }
+
+        $data = $request->only('name');
+
+        if ($request->hasFile('background_image')) {
+            $data['background_image'] = $this->imageUpload($request, 'background_image', 'virtual_tour_categories');
+        }
+
+        $category = HomeVirtualTourCategory::create($data);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Category created successfully',
+            'data' => $category,
+        ], 201);
+    }
+
+    // Create Subcategory
+    public function createSubcategory(Request $request, $categoryId)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'background_image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation errors',
+                'errors' => $validator->errors(),
+            ], 400);
+        }
+
+        $category = HomeVirtualTourCategory::find($categoryId);
+
+        if (!$category) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Category not found',
+            ], 404);
+        }
+
+        $data = $request->only('name');
+
+        if ($request->hasFile('background_image')) {
+            $data['background_image'] = $this->imageUpload($request, 'background_image', 'virtual_tour_subcategories');
+        }
+
+        $subcategory = $category->subcategories()->create($data);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Subcategory created successfully',
+            'data' => $subcategory,
+        ], 201);
+    }
+
+    // Update Category
+    public function updateCategory(Request $request, $id)
+    {
+        $category = HomeVirtualTourCategory::find($id);
+
+        if (!$category) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Category not found',
+            ], 404);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'background_image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation errors',
+                'errors' => $validator->errors(),
+            ], 400);
+        }
+
+        $category->fill($request->only('name'));
+
+        if ($request->hasFile('background_image')) {
+            $category->background_image = $this->imageUpload($request, 'background_image', 'virtual_tour_categories');
+        }
+
+        $category->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Category updated successfully',
+            'data' => $category,
+        ], 200);
+    }
+
+    // Delete Category
+    public function deleteCategory($id)
+    {
+        $category = HomeVirtualTourCategory::find($id);
+
+        if (!$category) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Category not found',
+            ], 404);
+        }
+
+        $category->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Category deleted successfully',
+        ], 200);
+    }
+
+    // Update Subcategory
+    public function updateSubcategory(Request $request, $id)
+    {
+        $subcategory = HomeVirtualTourSubcategory::find($id);
+
+        if (!$subcategory) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Subcategory not found',
+            ], 404);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'background_image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation errors',
+                'errors' => $validator->errors(),
+            ], 400);
+        }
+
+        $subcategory->fill($request->only('name'));
+
+        if ($request->hasFile('background_image')) {
+            $subcategory->background_image = $this->imageUpload($request, 'background_image', 'virtual_tour_subcategories');
+        }
+
+        $subcategory->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Subcategory updated successfully',
+            'data' => $subcategory,
+        ], 200);
+    }
+
+    // Delete Subcategory
+    public function deleteSubcategory($id)
+    {
+        $subcategory = HomeVirtualTourSubcategory::find($id);
+
+        if (!$subcategory) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Subcategory not found',
+            ], 404);
+        }
+
+        if ($subcategory->background_image) {
+            \Storage::disk('public')->delete($subcategory->background_image);
+        }
+
+        $subcategory->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Subcategory deleted successfully',
         ], 200);
     }
 }
