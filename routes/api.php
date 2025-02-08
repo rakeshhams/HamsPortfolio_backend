@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\EmployeeController;
 use App\Http\Controllers\Api\StoriesController;
 use App\Http\Controllers\Api\AboutUsController;
 use App\Http\Controllers\Api\NewHomeController;
+use App\Http\Controllers\Api\FooterController;
 
 
 use App\Models\User;
@@ -314,6 +315,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('home/virtual-tour/categories/{categoryId}/subcategories', [NewHomeController::class, 'createSubcategory']);
         Route::post('home/virtual-tour/subcategories/{id}', [NewHomeController::class, 'updateSubcategory']); // Update a subcategory
         Route::delete('home/virtual-tour/subcategories/{id}', [NewHomeController::class, 'deleteSubcategory']); // Delete a subcategory
+
+        // Footer Companies
+        Route::get('footer/companies', [FooterController::class, 'getAllCompanies']); // Fetch all companies
+        Route::post('footer/companies', [FooterController::class, 'createCompany']); // Create a new company
+        Route::post('footer/companies/{id}', [FooterController::class, 'updateCompany']); // Update a company
+        Route::delete('footer/companies/{id}', [FooterController::class, 'deleteCompany']); // Delete a company
     });
 });
 
@@ -396,6 +403,10 @@ Route::prefix('client')->group(function () {
 
     // Home Virtual Tour Categories
     Route::get('home/virtual-tour/categories', [NewHomeController::class, 'getAllCategories']);
+
+    //Footer
+    Route::get('footer/companies', [FooterController::class, 'getAllCompanies']); // Fetch all companies
+
 
 });
 
