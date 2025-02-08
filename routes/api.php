@@ -288,8 +288,13 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('home/business-units', [NewHomeController::class, 'getAllBusinessUnits']); // Fetch all business units
         Route::get('home/business-units/{id}', [NewHomeController::class, 'getBusinessUnitById']); // Fetch a single business unit by ID
         Route::post('home/business-units', [NewHomeController::class, 'createBusinessUnit']); // Create a new business unit
-        Route::put('home/business-units/{id}', [NewHomeController::class, 'updateBusinessUnit']); // Update a business unit
+        Route::post('home/business-units/{id}', [NewHomeController::class, 'updateBusinessUnit']); // Update a business unit
         Route::delete('home/business-units/{id}', [NewHomeController::class, 'deleteBusinessUnit']); // Delete a business unit
+
+        Route::get('home/services', [NewHomeController::class, 'getAllServices']); // Fetch all services
+        Route::post('home/services', [NewHomeController::class, 'createService']); // Create a new service
+        Route::post('home/services/{id}', [NewHomeController::class, 'updateService']); // Update a service
+        Route::delete('home/services/{id}', [NewHomeController::class, 'deleteService']); // Delete a service
     });
 });
 
@@ -366,7 +371,7 @@ Route::prefix('client')->group(function () {
     Route::get('about-us/facilities/{id}', [AboutUsController::class, 'getFacilityById']); // Fetch a single facility by ID
     Route::get('home/business-units', [NewHomeController::class, 'getAllBusinessUnits']); // Fetch all business units
     Route::get('home/business-units/{id}', [NewHomeController::class, 'getBusinessUnitById']); // Fetch a single business unit by ID
-
+    Route::get('home/services', [NewHomeController::class, 'getAllServices']);
 });
 
 // test route
