@@ -7,6 +7,7 @@ use App\Models\HomeBusinessUnit;
 use App\Models\HomeService;
 use App\Models\HomeAboutUs;
 use App\Models\HomeExplore;
+use App\Models\SliderFeatureInfo;
 use App\Models\HomeVirtualTourCategory;
 use App\Models\HomeVirtualTourSubcategory;
 use Illuminate\Http\Request;
@@ -594,6 +595,55 @@ class NewHomeController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Subcategory deleted successfully',
+        ], 200);
+    }
+
+    // Fetch Slider Feature Info
+    public function getSliderFeatureInfo()
+    {
+        $sliderInfo = SliderFeatureInfo::first();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Slider feature info retrieved successfully',
+            'data' => $sliderInfo,
+        ], 200);
+    }
+
+    // Update Slider Feature Info
+    public function updateSliderFeatureInfo(Request $request)
+    {
+        $sliderInfo = SliderFeatureInfo::firstOrCreate([]);
+
+        $validator = Validator::make($request->all(), [
+            'title' => 'nullable|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'description' => 'nullable|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation errors',
+                'errors' => $validator->errors(),
+            ], 400);
+        }
+
+        $sliderInfo->fill($request->only([
+            'title',
+            'description',
+        ]));
+
+        if ($request->hasFile('image')) {
+            $sliderInfo->image = $this->imageUpload($request, 'image', 'slider_feature_info');
+        }
+
+        $sliderInfo->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Slider feature info updated successfully',
+            'data' => $sliderInfo,
         ], 200);
     }
 }

@@ -315,7 +315,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('home/virtual-tour/categories/{categoryId}/subcategories', [NewHomeController::class, 'createSubcategory']);
         Route::post('home/virtual-tour/subcategories/{id}', [NewHomeController::class, 'updateSubcategory']); // Update a subcategory
         Route::delete('home/virtual-tour/subcategories/{id}', [NewHomeController::class, 'deleteSubcategory']); // Delete a subcategory
-
+        Route::get('home/slider/feature-info', [NewHomeController::class, 'getSliderFeatureInfo']); // Fetch slider feature info
+        Route::post('home/slider/feature-info', [NewHomeController::class, 'updateSliderFeatureInfo']);
         // Footer Companies
         Route::get('footer/companies', [FooterController::class, 'getAllCompanies']); // Fetch all companies
         Route::post('footer/companies', [FooterController::class, 'createCompany']); // Create a new company
@@ -404,6 +405,7 @@ Route::prefix('client')->group(function () {
     Route::get('home/services', [NewHomeController::class, 'getAllServices']);
     Route::get('home/about-us', [NewHomeController::class, 'getHomeAboutUs']); // Fetch data
     Route::get('home/explore', [NewHomeController::class, 'getHomeExplore']); // Fetch data
+    Route::get('home/slider/feature-info', [NewHomeController::class, 'getSliderFeatureInfo']); // Fetch slider feature info
 
     // Home Virtual Tour Categories
     Route::get('home/virtual-tour/categories', [NewHomeController::class, 'getAllCategories']);
