@@ -53,8 +53,8 @@ class NewHomeController extends Controller
     public function createBusinessUnit(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'title' => 'required|string|max:255',
-            'short_description' => 'nullable|string|max:255',
+            'title' => 'required|string',
+            'short_description' => 'nullable|string',
             'description' => 'nullable|string',
             'image_one' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'image_two' => 'nullable|image|mimes:jpeg,png,jpg,gif',
@@ -101,8 +101,8 @@ class NewHomeController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'title' => 'required|string|max:255',
-            'short_description' => 'nullable|string|max:255',
+            'title' => 'required|string',
+            'short_description' => 'nullable|string',
             'description' => 'nullable|string',
             'image_one' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'image_two' => 'nullable|image|mimes:jpeg,png,jpg,gif',
@@ -180,9 +180,9 @@ class NewHomeController extends Controller
     public function createService(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'nullable|string|max:255',
-            'title' => 'nullable|string|max:255',
-            'subtitle' => 'nullable|string|max:255',
+            'name' => 'nullable|string',
+            'title' => 'nullable|string',
+            'subtitle' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'description' => 'nullable|string',
         ]);
@@ -223,9 +223,9 @@ class NewHomeController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'name' => 'nullable|string|max:255',
-            'title' => 'nullable|string|max:255',
-            'subtitle' => 'nullable|string|max:255',
+            'name' => 'nullable|string',
+            'title' => 'nullable|string',
+            'subtitle' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'description' => 'nullable|string',
         ]);
@@ -295,10 +295,10 @@ class NewHomeController extends Controller
         $aboutUs = HomeAboutUs::firstOrCreate([]);
 
         $validator = Validator::make($request->all(), [
-            'name' => 'nullable|string|max:255',
-            'title' => 'nullable|string|max:255',
-            'subtitle' => 'nullable|string|max:255',
-            'meta_title' => 'nullable|string|max:255',
+            'name' => 'nullable|string',
+            'title' => 'nullable|string',
+            'subtitle' => 'nullable|string',
+            'meta_title' => 'nullable|string',
             'meta_description' => 'nullable|string',
             'description' => 'nullable|string',
             'youtube_link' => 'nullable|url',
@@ -358,8 +358,8 @@ class NewHomeController extends Controller
         $explore = HomeExplore::firstOrCreate([]);
 
         $validator = Validator::make($request->all(), [
-            'name' => 'nullable|string|max:255',
-            'title' => 'nullable|string|max:255',
+            'name' => 'nullable|string',
+            'title' => 'nullable|string',
             'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
         ]);
@@ -407,7 +407,7 @@ class NewHomeController extends Controller
     public function createCategory(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
+            'name' => 'required|string',
             'background_image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
         ]);
 
@@ -438,7 +438,7 @@ class NewHomeController extends Controller
     public function createSubcategory(Request $request, $categoryId)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
+            'name' => 'required|string',
             'background_image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
         ]);
 
@@ -487,7 +487,7 @@ class NewHomeController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
+            'name' => 'required|string',
             'background_image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
         ]);
 
@@ -547,7 +547,7 @@ class NewHomeController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
+            'name' => 'required|string',
             'background_image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
         ]);
 
@@ -616,7 +616,7 @@ class NewHomeController extends Controller
         $sliderInfo = SliderFeatureInfo::firstOrCreate([]);
 
         $validator = Validator::make($request->all(), [
-            'title' => 'nullable|string|max:255',
+            'title' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'description' => 'nullable|string',
         ]);
