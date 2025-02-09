@@ -230,6 +230,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('employee/feedback/{id}', [EmployeeController::class, 'updateEmployeeFeedback']); // Update Employee Feedback
         Route::delete('employee/feedback/{id}', [EmployeeController::class, 'deleteEmployeeFeedback']); // Delete Employee Feedback
 
+        //No route found
+
         //News and story new
         Route::get('stories/recent-posts', [StoriesController::class, 'getAllStoryRecentPosts']); // Fetch all Story Recent Posts
         Route::post('stories/recent-posts', [StoriesController::class, 'createStoryRecentPost']); // Create Story Recent Post
