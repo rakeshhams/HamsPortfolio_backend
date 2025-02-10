@@ -718,4 +718,5 @@ class HomeService
             ->where('sub_menu_id', $id)->select('id', 'menu_id', 'sub_menu_id', 'title', 'description', 'image')->first();
         return $this->apiResponse($section, 'Home Service Get Successfully', true, 200);
     }
+    
 }
