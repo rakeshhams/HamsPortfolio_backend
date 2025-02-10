@@ -14,6 +14,7 @@ class HomeSustainabilityFeature extends Model
         'title',
         'icon',
         'color',
+        'image',
         'count',
         'is_active',
     ];

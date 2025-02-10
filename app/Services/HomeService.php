@@ -541,6 +541,12 @@ class HomeService
                     $sustain->icon = $this->imageUpload($request, 'icon', 'icon');
                     $sustain->save();
                 }
+                if ($request->hasFile('image')) {
+                    $sustain->image = $this->imageUpload($request, 'image', 'image');
+                    $sustain->save();
+                }
+
+
                 return $this->apiResponse([], 'Sustainability Feature Saved Successfully', true, 201);
             } else {
                 $sustain = HomeSustainabilityFeature::find($request->id);
@@ -549,8 +555,34 @@ class HomeService
                     $sustain->icon = $this->imageUpload($request, 'icon', 'icon', $sustain->icon);
                     $sustain->save();
                 }
+                if ($request->hasFile('image')) {
+                    $sustain->image = $this->imageUpload($request, 'image', 'image', $sustain->image);
+                    $sustain->save();
+                }
                 return $this->apiResponse([], 'Sustainability Feature Updated Successfully', true, 200);
             }
+        } catch (\Throwable $th) {
+            return $this->apiResponse([], $th->getMessage(), 500);
+        }
+    }
+
+    public function deleteSustainabilityFeature($id)
+    {
+        try {
+            $sustainabilityFeature = HomeSustainabilityFeature::find($id);
+
+            if (!$sustainabilityFeature) {
+                return $this->apiResponse([], 'Sustainability Feature not found', false, 404);
+            }
+
+            // Delete the associated icon from storage
+            if ($sustainabilityFeature->icon) {
+                \Storage::disk('public')->delete($sustainabilityFeature->icon);
+            }
+
+            $sustainabilityFeature->delete();
+
+            return $this->apiResponse([], 'Sustainability Feature deleted successfully', true, 200);
         } catch (\Throwable $th) {
             return $this->apiResponse([], $th->getMessage(), 500);
         }
@@ -668,7 +700,7 @@ class HomeService
                 'productList' => Product::select('id', 'client_id', 'short_title', 'title', 'short_description', 'image')->take(6)->get(),
                 'ourClient' => OurClient::select('id', 'title', 'name', 'link', 'logo')->get(),
                 'sustainability' => HomeSustainability::select('id', 'title', 'description', 'button_text', 'button_link')->first(),
-                'sustainabilityFeature' => HomeSustainabilityFeature::select('id', 'home_sustainability_id', 'title', 'color', 'count', 'icon')->get(),
+                'sustainabilityFeature' => HomeSustainabilityFeature::select('id', 'home_sustainability_id', 'title', 'color', 'count','image','icon')->get(),
                 'certification' => HomeCertification::select('id', 'sort_title', 'title', 'description', 'button_text', 'button_link')->first(),
                 'certificationList' => Certification::select('id', 'certification_category_id', 'sort_title', 'title', 'description', 'button_text', 'button_link', 'image', 'certificate_img')->get(),
             ];

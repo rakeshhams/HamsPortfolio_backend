@@ -82,6 +82,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('/sustainability-save-or-update', [HomeController::class, 'sustainabilitySaveOrUpdate']);
         Route::get('/sustainability-feature-list', [HomeController::class, 'sustainabilityFeatureList']);
         Route::post('/sustainability-feature-save-or-update', [HomeController::class, 'sustainabilityFeatureSaveOrUpdate']);
+        Route::delete('/sustainability-feature/{id}', [HomeController::class, 'deleteSustainabilityFeature']);
+
         Route::get('certification-section', [HomeController::class, 'certificationSection']);
         Route::post('certification-Section-update', [HomeController::class, 'certificationSectionUpdate']);
         Route::get('/certification-list', [HomeController::class, 'certificationList']);

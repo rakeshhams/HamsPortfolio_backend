@@ -15,7 +15,7 @@ class CreateSliderFeatureInfoTable extends Migration
     {
         Schema::create('slider_feature_info', function (Blueprint $table) {
             $table->id();
-            $table->string('title')->nullable(); // Title of the slider
+            $table->string(column: 'title')->nullable(); // Title of the slider
             $table->string('image')->nullable(); // Image for the slider
             $table->text('description')->nullable(); // Description of the feature
             $table->timestamps(); // created_at and updated_at

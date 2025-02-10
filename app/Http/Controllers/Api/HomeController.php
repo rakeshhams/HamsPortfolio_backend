@@ -129,6 +129,11 @@ class HomeController extends Controller
     {
         return $this->homeService->sustainabilityFeatureSaveOrUpdate($request);
     }
+    // Delete Sustainability Feature
+    public function deleteSustainabilityFeature($id)
+    {
+        return $this->homeService->deleteSustainabilityFeature($id);
+    }
 
     public function certificationSection()
     {
