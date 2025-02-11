@@ -347,7 +347,39 @@ class AboutService
             return $this->apiResponse([], $th->getMessage(), false, 500);
         }
     }
+    public function deleteElevatingSectionFeature($id)
+    {
+        try {
+            // Begin transaction
+            DB::beginTransaction();
 
+            $elevatingFeature = AboutElevationFeature::find($id);
+
+            if (!$elevatingFeature) {
+                return $this->apiResponse([], 'Elevating Section Feature not found', false, 404);
+            }
+
+            // Delete associated files if exist
+            if ($elevatingFeature->icon) {
+                \Storage::disk('public')->delete($elevatingFeature->icon);
+            }
+
+            if ($elevatingFeature->file) {
+                \Storage::disk('public')->delete($elevatingFeature->file);
+            }
+
+            $elevatingFeature->delete();
+
+            // Commit transaction
+            DB::commit();
+
+            return $this->apiResponse([], 'Elevating Section Feature deleted successfully', true, 200);
+        } catch (\Throwable $th) {
+            // Rollback transaction on error
+            DB::rollBack();
+            return $this->apiResponse([], $th->getMessage(), 500);
+        }
+    }
 
     public function customerSupportSection()
     {

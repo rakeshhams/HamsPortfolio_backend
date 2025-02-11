@@ -124,6 +124,10 @@ class AboutController extends Controller
     {
         return $this->aboutService->elevatingSectionFeatureCreateOrUpdate($request);
     }
+    public function deleteElevatingSectionFeature($id)
+    {
+        return $this->aboutService->deleteElevatingSectionFeature($id);
+    }
 
     public function customerSupportSection()
     {

@@ -115,6 +115,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('/elevating-section-update', [AboutController::class, 'elevatingSectionUpdate']);
         Route::get('/elevating-section-feature-list', [AboutController::class, 'elevatingSectionFeatureList']);
         Route::post('/elevating-section-feature-create-or-update', [AboutController::class, 'elevatingSectionFeatureCreateOrUpdate']);
+        Route::delete('/elevating-section-feature/{id}', [AboutController::class, 'deleteElevatingSectionFeature']);
         Route::get('customer-support-section', [AboutController::class, 'customerSupportSection']);
         Route::post('customer-support-section-update', [AboutController::class, 'customerSupportSectionUpdate']);
         //product 
