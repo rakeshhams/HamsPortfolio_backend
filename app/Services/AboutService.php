@@ -175,7 +175,22 @@ class AboutService
         }
     }
 
+    public function deleteJourneySectionTimeline($id)
+    {
+        try {
+            $journeyTimeline = AboutJourneyTimeline::find($id);
 
+            if (!$journeyTimeline) {
+                return $this->apiResponse([], 'Journey Section Timeline not found', false, 404);
+            }
+
+            $journeyTimeline->delete();
+
+            return $this->apiResponse([], 'Journey Section Timeline deleted successfully', true, 200);
+        } catch (\Throwable $th) {
+            return $this->apiResponse([], $th->getMessage(), 500);
+        }
+    }
     public function qualitySection()
     {
         $quality = AboutQualitySection::first();
@@ -213,7 +228,7 @@ class AboutService
                 'title' => $request->title,
                 'description' => $request->description,
                 'designation' => $request->designation,
-                'long_description'=> $request->long_description,
+                'long_description' => $request->long_description,
                 'is_active' => $request->is_active,
             ];
 
@@ -286,7 +301,7 @@ class AboutService
         $validatedData = $request->validate([
             'title' => 'required',
         ]);
-    
+
         // Prepare the data array
         $elevatingSec = [
             'about_elevation_section_id' => 1,
@@ -296,11 +311,11 @@ class AboutService
             'link' => $request->link,
             'is_active' => $request->is_active,
         ];
-    
+
         try {
             // Use transaction for database operations
             DB::beginTransaction();
-    
+
             if (empty($request->id)) {
                 // Create a new record
                 $elevating = AboutElevationFeature::create($elevatingSec);
@@ -309,7 +324,7 @@ class AboutService
                 $elevating = AboutElevationFeature::findOrFail($request->id);
                 $elevating->update($elevatingSec);
             }
-    
+
             // Handle file uploads
             if ($request->hasFile('icon')) {
                 $elevating->icon = $this->imageUpload($request, 'icon', 'icon', $request->file('icon'));
@@ -317,22 +332,22 @@ class AboutService
             if ($request->hasFile('file')) {
                 $elevating->file = $this->imageUpload($request, 'file', 'file', $request->file('file'));
             }
-    
+
             // Save the record
             $elevating->save();
-    
+
             // Commit the transaction
             DB::commit();
-    
+
             return $this->apiResponse($elevating, empty($request->id) ? 'Create successfully' : 'Update successfully', true, 200);
-    
+
         } catch (\Throwable $th) {
             // Rollback the transaction on error
             DB::rollBack();
             return $this->apiResponse([], $th->getMessage(), false, 500);
         }
     }
-    
+
 
     public function customerSupportSection()
     {
@@ -358,7 +373,7 @@ class AboutService
         $about = [
             'who_we_are' => AboutWhoWeAreSection::select('short_title', 'title', 'description', 'image')->first(),
             'process' => AboutProcessSection::select('short_title', 'title', 'description')->first(),
-            'process_feature' => AboutProcessFeature::where('about_process_section_id', 1)->select('title', 'description','long_description','image')
+            'process_feature' => AboutProcessFeature::where('about_process_section_id', 1)->select('title', 'description', 'long_description', 'image')
                 ->get(),
             'journey' => AboutJourneySection::select(
                 'short_title',
@@ -374,21 +389,21 @@ class AboutService
                 'description'
             )->first(),
             'quality_feature' => AboutQualityFeature::where('about_quality_section_id', 1)
-                ->select('title', 'description', 'icon','designation')
+                ->select('title', 'description', 'icon', 'designation')
                 ->get(),
             'client' => AboutClientSection::select(
                 'short_title',
                 'title',
                 'description'
             )->first(),
-            'clientList' => OurClient::select('id', 'title', 'logo', 'name', 'link',)->get(),
+            'clientList' => OurClient::select('id', 'title', 'logo', 'name', 'link', )->get(),
             'elevating' => AboutElevationSection::select(
                 'short_title',
                 'title',
                 'description'
             )->first(),
             'elevating_feature' => AboutElevationFeature::where('about_elevation_section_id', 1)
-                ->select('title', 'description', 'icon', 'year','link','file')
+                ->select('title', 'description', 'icon', 'year', 'link', 'file')
                 ->get(),
             'customer_support' => AboutCustomer::select('short_title', 'title', 'description')->first()
         ];

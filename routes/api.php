@@ -103,6 +103,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('/journey-section-update', [AboutController::class, 'journeySectionUpdate']);
         Route::get('/journey-section-timeline-list', [AboutController::class, 'journeySectionTimelineList']);
         Route::post('/journey-section-timeline-create-or-update', [AboutController::class, 'journeySectionTimelineCreateOrUpdate']);
+        Route::delete('/journey-section-timeline/{id}', [AboutController::class, 'deleteJourneySectionTimeline']);
+
         Route::get('/quality-section', [AboutController::class, 'qualitySection']);
         Route::post('/quality-section-update', [AboutController::class, 'qualitySectionUpdate']);
         Route::get('/quality-section-feature-list', [AboutController::class, 'qualitySectionFeatureList']);

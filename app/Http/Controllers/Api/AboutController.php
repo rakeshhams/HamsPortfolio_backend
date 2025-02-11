@@ -46,7 +46,7 @@ class AboutController extends Controller
 
     public function processSectionFeatureCreateOrUpdate(Request $request)
     {
-   
+
         return $this->aboutService->processSectionFeatureCreateOrUpdate($request);
     }
     public function journeySection()
@@ -69,7 +69,11 @@ class AboutController extends Controller
     {
         return $this->aboutService->journeySectionTimelineCreateOrUpdate($request);
     }
-
+    // Delete Journey Section Timeline
+    public function deleteJourneySectionTimeline($id)
+    {
+        return $this->aboutService->deleteJourneySectionTimeline($id);
+    }
     public function qualitySection()
     {
         return $this->aboutService->qualitySection();
@@ -91,12 +95,12 @@ class AboutController extends Controller
         return $this->aboutService->qualitySectionFeatureCreateOrUpdate($request);
     }
 
-    public function  clientSection()
+    public function clientSection()
     {
         return $this->aboutService->clientSection();
     }
 
-    public function  clientSectionUpdate(Request $request)
+    public function clientSectionUpdate(Request $request)
     {
         return $this->aboutService->clientSectionUpdate($request);
     }
