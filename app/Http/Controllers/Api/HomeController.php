@@ -109,7 +109,10 @@ class HomeController extends Controller
     {
         return $this->homeService->ourClientSaveOrUpdate($request);
     }
-
+    public function deleteOurClient($id)
+    {
+        return $this->homeService->deleteOurClient($id);
+    }
     public function sustainabilitySection()
     {
         return $this->homeService->sustainabilitySection();
@@ -153,6 +156,10 @@ class HomeController extends Controller
     public function certificationSaveOrUpdate(Request $request)
     {
         return $this->homeService->certificationSaveOrUpdate($request);
+    }
+    public function deleteCertification($id)
+    {
+        return $this->homeService->deleteCertification($id);
     }
 
     public function ourServiceList()

@@ -415,6 +415,27 @@ class HomeService
     }
 
 
+    public function deleteOurClient($id)
+    {
+        try {
+            $ourClient = OurClient::find($id);
+
+            if (!$ourClient) {
+                return $this->apiResponse([], 'Our Client not found', false, 404);
+            }
+
+            // Delete the associated logo from storage
+            if ($ourClient->logo) {
+                \Storage::disk('public')->delete($ourClient->logo);
+            }
+
+            $ourClient->delete();
+
+            return $this->apiResponse([], 'Our Client deleted successfully', true, 200);
+        } catch (\Throwable $th) {
+            return $this->apiResponse([], $th->getMessage(), 500);
+        }
+    }
 
 
     public function clientProductList($id)
@@ -428,7 +449,7 @@ class HomeService
     }
     public function ourClientProductSaveOrUpdate($request)
     {
-    try {
+        try {
             $ourClient = [
                 'client_id' => $request->client_id,
                 'image' => $request->image,
@@ -446,7 +467,7 @@ class HomeService
                 }
                 return $this->apiResponse($pClient, 'Our product Saved Successfully', true, 201);
             } else {
-                
+
                 $pClient = ClientProduct::find($request->id);
                 $pClient->update($ourClient);
                 if ($request->hasFile('image')) {
@@ -464,16 +485,16 @@ class HomeService
     {
         try {
             $clientProduct = ClientProduct::find($id);
-            if ($clientProduct->image!= null) {
+            if ($clientProduct->image != null) {
                 $this->deleteImage($clientProduct->image);
             }
             $clientProduct->delete();
             return $this->apiResponse([], 'Our client product Deleted Successfully', true, 200);
-            } catch (\Throwable $th) {
-                return $this->apiResponse([], $th->getMessage(), false, 500);
-            }
+        } catch (\Throwable $th) {
+            return $this->apiResponse([], $th->getMessage(), false, 500);
+        }
 
-    } 
+    }
 
     public function sustainabilitySection()
     {
@@ -684,7 +705,30 @@ class HomeService
         }
     }
 
+    public function deleteCertification($id)
+    {
+        try {
+            $certification = Certification::find($id);
 
+            if (!$certification) {
+                return $this->apiResponse([], 'Certification not found', false, 404);
+            }
+
+            // Delete the associated images from storage
+            if ($certification->image) {
+                \Storage::disk('public')->delete($certification->image);
+            }
+            if ($certification->certificate_img) {
+                \Storage::disk('public')->delete($certification->certificate_img);
+            }
+
+            $certification->delete();
+
+            return $this->apiResponse([], 'Certification deleted successfully', true, 200);
+        } catch (\Throwable $th) {
+            return $this->apiResponse([], $th->getMessage(), 500);
+        }
+    }
     public function homePage()
     {
         try {
@@ -693,14 +737,14 @@ class HomeService
                 'sliderFeature' => SliderFeatureSection::select('id', 'title_one', 'title_two', 'title_three', 'title_four', 'logo')->first(),
                 'about' => HomeAboutSection::select('id', 'short_title', 'title', 'short_description', 'description', 'button_text', 'button_link', 'featured_image', 'start_count', 'end_count', 'name')->first(),
                 'ourService' => OurService::select('id', 'title', 'description', 'image')->get(), // 'image
-                'achievement' => CompanyAchievement::where('is_active', 1)->select('id', 'title', 'count_start', 'count_end', 'link', 'icon',)->get(),
-                'subMenuList' => SubMenu::where('menu_id', 7)->select('id', 'menu_id', 'name', 'description', 'link',)->get(),
+                'achievement' => CompanyAchievement::where('is_active', 1)->select('id', 'title', 'count_start', 'count_end', 'link', 'icon', )->get(),
+                'subMenuList' => SubMenu::where('menu_id', 7)->select('id', 'menu_id', 'name', 'description', 'link', )->get(),
                 'virtually' => VirtuallySection::select('id', 'sort_title', 'title', 'description', 'button_text', 'link', 'bg_image')->first(),
                 'product' => HomeProductSection::select('id', 'sort_title', 'title', 'description')->first(),
                 'productList' => Product::select('id', 'client_id', 'short_title', 'title', 'short_description', 'image')->take(6)->get(),
                 'ourClient' => OurClient::select('id', 'title', 'name', 'link', 'logo')->get(),
                 'sustainability' => HomeSustainability::select('id', 'title', 'description', 'button_text', 'button_link')->first(),
-                'sustainabilityFeature' => HomeSustainabilityFeature::select('id', 'home_sustainability_id', 'title', 'color', 'count','image','icon')->get(),
+                'sustainabilityFeature' => HomeSustainabilityFeature::select('id', 'home_sustainability_id', 'title', 'color', 'count', 'image', 'icon')->get(),
                 'certification' => HomeCertification::select('id', 'sort_title', 'title', 'description', 'button_text', 'button_link')->first(),
                 'certificationList' => Certification::select('id', 'certification_category_id', 'sort_title', 'title', 'description', 'button_text', 'button_link', 'image', 'certificate_img')->get(),
             ];
@@ -713,10 +757,10 @@ class HomeService
 
     public function homeServiceBySubmenuId($request)
     {
-        $id =  $request->id;
+        $id = $request->id;
         $section = MenuSection::where('menu_id', 7)
             ->where('sub_menu_id', $id)->select('id', 'menu_id', 'sub_menu_id', 'title', 'description', 'image')->first();
         return $this->apiResponse($section, 'Home Service Get Successfully', true, 200);
     }
-    
+
 }

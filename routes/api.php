@@ -75,6 +75,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('/virtually-save-or-update', [HomeController::class, 'virtualSectionSaveOrUpdate']);
         Route::get('/client-list', [HomeController::class, 'ourClientList']);
         Route::post('/client-save-or-update', [HomeController::class, 'ourClientSaveOrUpdate']);
+        Route::delete('/our-client/{id}', [HomeController::class, 'deleteOurClient']);
+
         Route::get('/client-product-list/{id}', [HomeController::class, 'clientProductList']);
         Route::delete('/delete-client-product/{id}', [HomeController::class, 'clientProductDelete']);
         Route::post('/client-Product-save-or-update', [HomeController::class, 'ourClientProductSaveOrUpdate']);
@@ -88,6 +90,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('certification-Section-update', [HomeController::class, 'certificationSectionUpdate']);
         Route::get('/certification-list', [HomeController::class, 'certificationList']);
         Route::post('/certification-save-or-update', [HomeController::class, 'certificationSaveOrUpdate']);
+        Route::delete('/certification/{id}', [HomeController::class, 'deleteCertification']);
 
         //about us
         Route::get('/who-we-are-section', [AboutController::class, 'whoWeAreSection']);
