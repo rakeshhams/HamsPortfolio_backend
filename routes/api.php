@@ -17,6 +17,7 @@ use App\Http\Controllers\Api\StoriesController;
 use App\Http\Controllers\Api\AboutUsController;
 use App\Http\Controllers\Api\NewHomeController;
 use App\Http\Controllers\Api\FooterController;
+use App\Http\Controllers\Api\ClientMessageController;
 
 
 use App\Models\User;
@@ -337,6 +338,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         // Footer Information
         Route::get('footer/information', [FooterController::class, 'getFooterInformation']); // Fetch footer information
         Route::post('footer/information', [FooterController::class, 'updateFooterInformation']); // Update footer information
+
+        //Message List
+        Route::get('client/messages', [ClientMessageController::class, 'getAllMessages']); // Fetch all client messages
+        Route::delete('client/messages/{id}', [ClientMessageController::class, 'deleteClientMessage']); // Delete a client message
     });
 });
 
@@ -424,6 +429,9 @@ Route::prefix('client')->group(function () {
     //Footer
     Route::get('footer/companies', [FooterController::class, 'getAllCompanies']); // Fetch all companies
     Route::get('footer/information', [FooterController::class, 'getFooterInformation']); // Fetch footer information
+
+    //Message
+    Route::post('message', [ClientMessageController::class, 'storeClientMessage']); // Store client message
 
 
 });
