@@ -463,7 +463,28 @@ class StoriesController extends Controller
             'message' => 'Image upload failed',
         ], 500);
     }
+    // Fetch Images by Category ID
+    public function getImagesByCategory($categoryId)
+    {
+        // Check if the category exists
+        $category = StoryCategory::find($categoryId);
 
+        if (!$category) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Category not found',
+            ], 404);
+        }
+
+        // Fetch all images related to this category
+        $images = StoryCategoryImage::where('story_category_id', $categoryId)->get();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Images retrieved successfully',
+            'data' => $images,
+        ], 200);
+    }
     // Update an Image in Story Category
     public function updateStoryCategoryImage(Request $request, $imageId)
     {

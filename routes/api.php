@@ -261,6 +261,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('stories/categories/{id}', [StoriesController::class, 'updateStoryCategory']); // Update category
         Route::delete('stories/categories/{id}', [StoriesController::class, 'deleteStoryCategory']); // Delete category
         Route::post('stories/categories/{categoryId}/images', [StoriesController::class, 'addImageToStoryCategory']); // Add image to category
+        Route::get('stories/categories/{categoryId}/images', [StoriesController::class, 'getImagesByCategory']);
 
         Route::post('stories/categories/images/{imageId}', [StoriesController::class, 'updateStoryCategoryImage']); // Update an image
         Route::delete('stories/categories/images/{imageId}', [StoriesController::class, 'deleteStoryCategoryImage']); // Delete an image
