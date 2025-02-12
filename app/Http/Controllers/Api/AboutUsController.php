@@ -38,8 +38,8 @@ class AboutUsController extends Controller
             'description' => 'nullable|string',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string',
-            'image_one' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'image_two' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image_one' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+            'image_two' => 'nullable|image|mimes:jpeg,png,jpg,gif',
         ]);
 
         if ($validator->fails()) {
@@ -185,7 +185,7 @@ class AboutUsController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'designation' => 'required|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'facebook_link' => 'nullable|url',
             'linkedin_link' => 'nullable|url',
             'twitter_link' => 'nullable|url',
@@ -229,7 +229,7 @@ class AboutUsController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'designation' => 'required|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'facebook_link' => 'nullable|url',
             'linkedin_link' => 'nullable|url',
             'twitter_link' => 'nullable|url',
@@ -320,8 +320,8 @@ class AboutUsController extends Controller
             'title' => 'required|string|max:255',
             'short_description' => 'nullable|string|max:255',
             'description' => 'nullable|string',
-            'image_one' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'image_two' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image_one' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+            'image_two' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'link' => 'nullable|url',
         ]);
 
@@ -368,8 +368,8 @@ class AboutUsController extends Controller
             'title' => 'required|string|max:255',
             'short_description' => 'nullable|string|max:255',
             'description' => 'nullable|string',
-            'image_one' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'image_two' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image_one' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+            'image_two' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'link' => 'nullable|url',
         ]);
 

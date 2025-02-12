@@ -34,7 +34,7 @@ class StoriesController extends Controller
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'link' => 'nullable|url',
             'post_date' => 'nullable|date_format:Y-m-d', // Accepts YYYY-MM-DD format
         ]);
@@ -77,7 +77,7 @@ class StoriesController extends Controller
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'link' => 'nullable|url',
             'post_date' => 'nullable|date_format:Y-m-d', // Ensures correct date format
         ]);
@@ -143,7 +143,7 @@ class StoriesController extends Controller
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
         ]);
 
         if ($validator->fails()) {
@@ -184,7 +184,7 @@ class StoriesController extends Controller
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
         ]);
 
         if ($validator->fails()) {
@@ -500,7 +500,7 @@ class StoriesController extends Controller
 
         // Validate the request
         $validator = Validator::make($request->all(), [
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif',
         ]);
 
         if ($validator->fails()) {
@@ -576,7 +576,7 @@ class StoriesController extends Controller
         $validator = Validator::make($request->all(), [
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string',
-            'hero_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'hero_image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
         ]);
 
         if ($validator->fails()) {
@@ -623,7 +623,7 @@ class StoriesController extends Controller
 
         // Validate the request
         $validator = Validator::make($request->all(), [
-            'hero_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'hero_image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'title' => 'nullable|string|max:255',
             'description' => 'nullable|string',
             'meta_title' => 'nullable|string|max:255',

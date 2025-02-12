@@ -35,7 +35,7 @@ class GoingGreenController extends Controller
         $heroSection = GoingGreenHeroSection::firstOrCreate([]);
 
         $validator = Validator::make($request->all(), [
-            'hero_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'hero_image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'title' => 'required|string|max:255',
             'subtitle' => 'nullable|string|max:255',
             'description' => 'nullable|string',
@@ -143,7 +143,7 @@ class GoingGreenController extends Controller
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
         ]);
 
         if ($validator->fails()) {
@@ -189,7 +189,7 @@ class GoingGreenController extends Controller
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
         ]);
 
         if ($validator->fails()) {
@@ -372,7 +372,7 @@ class GoingGreenController extends Controller
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
         ]);
 
         if ($validator->fails()) {
@@ -413,7 +413,7 @@ class GoingGreenController extends Controller
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
         ]);
 
         if ($validator->fails()) {
