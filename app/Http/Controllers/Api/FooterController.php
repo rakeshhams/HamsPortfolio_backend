@@ -72,7 +72,7 @@ class FooterController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
-            'link' => 'nullable|url',
+            'link' => 'nullable|string',
         ]);
 
         if ($validator->fails()) {
