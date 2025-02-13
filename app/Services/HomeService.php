@@ -50,7 +50,7 @@ class HomeService
 
             $request->validate([
                 'title' => 'required',
-                'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:1048',
+                'image' => 'image|mimes:jpeg,png,jpg,gif,svg',
             ]);
 
             if (empty($request->id)) {
@@ -659,7 +659,7 @@ class HomeService
         try {
             $request->validate([
                 'title' => 'required',
-                'certificate_img' => 'image|mimes:jpeg,png,jpg,gif,svg|max:1048',
+                'certificate_img' => 'image|mimes:jpeg,png,jpg,gif,svg',
             ]);
 
             $certifications = [
