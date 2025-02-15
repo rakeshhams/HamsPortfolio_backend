@@ -273,7 +273,19 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         //product and service
         Route::get('products/common-info', [StoriesController::class, 'getProductCommonInfo']); // Fetch Product Common Info
         Route::post('products/common-info', [StoriesController::class, 'updateProductCommonInfo']); // Update Product Common Info
+        // News Categories
+        Route::get('news/categories', [StoriesController::class, 'getAllNewsCategories']);
+        Route::post('news/categories', [StoriesController::class, 'createNewsCategory']);
+        Route::post('news/categories/{id}', [StoriesController::class, 'updateNewsCategory']);
+        Route::delete('news/categories/{id}', [StoriesController::class, 'deleteNewsCategory']);
 
+        // News Posts
+        Route::get('news', [StoriesController::class, 'getAllNews']);
+        Route::get('news/category/{categoryId}', [StoriesController::class, 'getNewsByCategory']);
+        Route::get('news/{id}', [StoriesController::class, 'getSingleNews']);
+        Route::post('news', [StoriesController::class, 'createNewsStory']);
+        Route::post('news/{id}', [StoriesController::class, 'updateNewsStory']);
+        Route::delete('news/{id}', [StoriesController::class, 'deleteNewsStory']);
         // About Us pages Main Section
         Route::get('about-us/main', [AboutUsController::class, 'getAboutUsMain']);
         Route::post('about-us/main', [AboutUsController::class, 'updateAboutUsMain']);

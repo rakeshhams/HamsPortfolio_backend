@@ -10,6 +10,8 @@ use App\Models\StoryCategory;
 use App\Models\StoryCategoryImage;
 use App\Models\StoryCommonInfo;
 use App\Models\ProductCommonInfo;
+use App\Models\NewsCategory;
+use App\Models\NewsAndStory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Traits\HelperTrait;
@@ -665,6 +667,226 @@ class StoriesController extends Controller
             'status' => 'success',
             'message' => 'Product Common Info updated successfully',
             'data' => $info,
+        ], 200);
+    }
+
+    // Fetch All News Categories
+    public function getAllNewsCategories()
+    {
+        $categories = NewsCategory::all();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'News Categories retrieved successfully',
+            'data' => $categories,
+        ], 200);
+    }
+
+    // Create News Category
+    public function createNewsCategory(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation errors',
+                'errors' => $validator->errors(),
+            ], 400);
+        }
+
+        $category = NewsCategory::create($request->only('name'));
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'News Category created successfully',
+            'data' => $category,
+        ], 201);
+    }
+
+    // Update News Category
+    public function updateNewsCategory(Request $request, $id)
+    {
+        $category = NewsCategory::find($id);
+
+        if (!$category) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Category not found',
+            ], 404);
+        }
+
+        $category->update($request->only('name'));
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'News Category updated successfully',
+            'data' => $category,
+        ], 200);
+    }
+
+    // Delete News Category
+    public function deleteNewsCategory($id)
+    {
+        $category = NewsCategory::find($id);
+
+        if (!$category) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Category not found',
+            ], 404);
+        }
+
+        $category->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'News Category deleted successfully',
+        ], 200);
+    }
+
+    // Fetch All News & Stories by Category
+    public function getNewsByCategory($categoryId)
+    {
+        $news = NewsAndStory::where('news_category_id', $categoryId)->get();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'News and Stories retrieved successfully',
+            'data' => $news,
+        ], 200);
+    }
+
+    // Fetch All News & Stories
+    public function getAllNews()
+    {
+        $news = NewsAndStory::with('category')->orderBy('created_at', 'desc')->get();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'All News and Stories retrieved successfully',
+            'data' => $news,
+        ], 200);
+    }
+
+    // Fetch Single News & Story by ID
+    public function getSingleNews($id)
+    {
+        $news = NewsAndStory::with('category')->find($id);
+
+        if (!$news) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'News post not found',
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'News post retrieved successfully',
+            'data' => $news,
+        ], 200);
+    }
+
+     // Create News Post
+     public function createNewsStory(Request $request)
+     {
+         $validator = Validator::make($request->all(), [
+             'news_category_id' => 'required|exists:news_categories,id',
+             'title' => 'required|string|max:255',
+             'short_description' => 'nullable|string',
+             'description' => 'nullable|string',
+             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+         ]);
+ 
+         if ($validator->fails()) {
+             return response()->json([
+                 'status' => 'error',
+                 'message' => 'Validation errors',
+                 'errors' => $validator->errors(),
+             ], 400);
+         }
+ 
+         $data = $request->only(['news_category_id', 'title', 'short_description', 'description']);
+ 
+         // Handle Image Upload Using HelperTrait
+         if ($request->hasFile('image')) {
+             $data['image'] = $this->imageUpload($request, 'image', 'news_posts');
+         }
+ 
+         $news = NewsAndStory::create($data);
+ 
+         return response()->json([
+             'status' => 'success',
+             'message' => 'News/Story created successfully',
+             'data' => $news,
+         ], 201);
+     }
+ 
+     // Update News Post
+     public function updateNewsStory(Request $request, $id)
+     {
+         $news = NewsAndStory::find($id);
+ 
+         if (!$news) {
+             return response()->json([
+                 'status' => 'error',
+                 'message' => 'News post not found',
+             ], 404);
+         }
+ 
+         $validator = Validator::make($request->all(), [
+             'news_category_id' => 'required|exists:news_categories,id',
+             'title' => 'required|string|max:255',
+             'short_description' => 'nullable|string',
+             'description' => 'nullable|string',
+             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+         ]);
+ 
+         if ($validator->fails()) {
+             return response()->json([
+                 'status' => 'error',
+                 'message' => 'Validation errors',
+                 'errors' => $validator->errors(),
+             ], 400);
+         }
+ 
+         $news->fill($request->only(['news_category_id', 'title', 'short_description', 'description']));
+ 
+         // Handle Image Upload Using HelperTrait
+         if ($request->hasFile('image')) {
+             $news->image = $this->imageUpload($request, 'image', 'news_posts', $news->image);
+         }
+ 
+         $news->save();
+ 
+         return response()->json([
+             'status' => 'success',
+             'message' => 'News/Story updated successfully',
+             'data' => $news,
+         ], 200);
+     }
+ 
+
+    // Delete News & Story
+    public function deleteNewsStory($id)
+    {
+        $news = NewsAndStory::find($id);
+
+        if (!$news) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'News post not found',
+            ], 404);
+        }
+
+        $news->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'News/Story deleted successfully',
         ], 200);
     }
 }
