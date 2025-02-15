@@ -18,6 +18,7 @@ use App\Http\Controllers\Api\AboutUsController;
 use App\Http\Controllers\Api\NewHomeController;
 use App\Http\Controllers\Api\FooterController;
 use App\Http\Controllers\Api\ClientMessageController;
+use App\Http\Controllers\Api\ServiceController;
 
 
 use App\Models\User;
@@ -354,6 +355,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         //Message List
         Route::get('client/messages', [ClientMessageController::class, 'getAllMessages']); // Fetch all client messages
         Route::delete('client/messages/{id}', [ClientMessageController::class, 'deleteClientMessage']); // Delete a client message
+
+        //Service List
+        Route::get('service-categories', [ServiceController::class, 'getAllServiceCategories']);
+        Route::post('service-categories', [ServiceController::class, 'createServiceCategory']);
+        Route::post('service-categories/{id}', [ServiceController::class, 'updateServiceCategory']);
+        Route::delete('service-categories/{id}', [ServiceController::class, 'deleteServiceCategory']);
     });
 });
 
@@ -445,7 +452,14 @@ Route::prefix('client')->group(function () {
     //Message
     Route::post('message', [ClientMessageController::class, 'storeClientMessage']); // Store client message
 
+    //Service
+    Route::get('service-categories', [ServiceController::class, 'getAllServiceCategories']);
 
+    //News
+    Route::get('news/categories', [StoriesController::class, 'getAllNewsCategories']);
+    Route::get('news', [StoriesController::class, 'getAllNews']);
+    Route::get('news/category/{categoryId}', [StoriesController::class, 'getNewsByCategory']);
+    Route::get('news/{id}', [StoriesController::class, 'getSingleNews']);
 });
 
 // test route
