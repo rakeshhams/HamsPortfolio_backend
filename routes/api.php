@@ -460,6 +460,7 @@ Route::prefix('client')->group(function () {
     Route::get('news', [StoriesController::class, 'getAllNews']);
     Route::get('news/category/{categoryId}', [StoriesController::class, 'getNewsByCategory']);
     Route::get('news/{id}', [StoriesController::class, 'getSingleNews']);
+    
 });
 
 // test route
