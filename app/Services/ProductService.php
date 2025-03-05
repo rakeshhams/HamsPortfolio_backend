@@ -241,6 +241,35 @@ class ProductService
 
     }
 
+    // In ProductService.php
+
+    public function deleteProductCategory($request)
+    {
+        try {
+            $category = ProductCategory::find($request->id);
+            if (!$category) {
+                return $this->apiResponse([], 'Product Category not found', false, 404);
+            }
+            $category->delete();
+            return $this->apiResponse([], 'Product Category Deleted Successfully', true, 200);
+        } catch (\Throwable $th) {
+            return $this->apiResponse([], $th->getMessage(), false, 500);
+        }
+    }
+
+    public function deleteProductSubCategory($request)
+    {
+        try {
+            $subCategory = ProductSubCategory::find($request->id);
+            if (!$subCategory) {
+                return $this->apiResponse([], 'Product SubCategory not found', false, 404);
+            }
+            $subCategory->delete();
+            return $this->apiResponse([], 'Product SubCategory Deleted Successfully', true, 200);
+        } catch (\Throwable $th) {
+            return $this->apiResponse([], $th->getMessage(), false, 500);
+        }
+    }
 
 
 

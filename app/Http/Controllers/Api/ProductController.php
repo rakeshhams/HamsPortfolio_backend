@@ -70,5 +70,16 @@ class ProductController extends Controller
     {
         return $this->productService->productSubCategoryListByCategoryId($request, $category_id);
     }
+    // In ProductController.php
+
+    public function deleteProductCategory(Request $request)
+    {
+        return $this->productService->deleteProductCategory($request);
+    }
+
+    public function deleteProductSubCategory(Request $request)
+    {
+        return $this->productService->deleteProductSubCategory($request);
+    }
 
 }
