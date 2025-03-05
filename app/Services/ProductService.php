@@ -30,10 +30,10 @@ class ProductService
             $products = [
                 'product_sub_category_id' => $request->product_sub_category_id,
                 'client_id' => $request->client_id,
-                'short_title' => $request->sort_title,
+                'short_title' => $request->short_title,
                 'title' => $request->title,
                 'image' => $request->image,
-                'short_description' => $request->sort_description,
+                'short_description' => $request->short_description,
                 'delivery_date' => $request->delivery_date,
                 'description' => $request->description,
                 'facebook_link' => $request->facebook_link,
