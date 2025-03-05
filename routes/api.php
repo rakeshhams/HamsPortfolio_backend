@@ -127,6 +127,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('/product-list/{sub_category_id}', [ProductController::class, 'productList']);
         Route::post('/product-save-or-update', [ProductController::class, 'saveOrUpdateProduct']);
         Route::get('product-details/{id}', [ProductController::class, 'productDetails']);
+        Route::delete('product-delete/{id}', [ProductController::class, 'deleteProduct']);
 
         Route::get('/product-sub-category-list/{category_id}', [ProductController::class, 'productSubCategory']);
         Route::post('/product-sub-category-save-or-update', [ProductController::class, 'productSubCategorySaveOrUpdate']);

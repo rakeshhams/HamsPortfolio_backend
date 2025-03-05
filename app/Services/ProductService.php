@@ -10,10 +10,10 @@ use App\Models\ProductSubCategory;
 class ProductService
 {
     use HelperTrait;
-    public function productList( $request)
+    public function productList($request)
     {
         try {
-            $products = Product::where('product_sub_category_id', $request->sub_category_id)-> get();
+            $products = Product::where('product_sub_category_id', $request->sub_category_id)->get();
             return $this->apiResponse($products, 'Product List Get Successfully', true, 200);
         } catch (\Throwable $th) {
             return $this->apiResponse([], $th->getMessage(), false, 500);
@@ -64,9 +64,24 @@ class ProductService
             return $this->apiResponse([], $th->getMessage(), 500);
         }
     }
+    // In ProductService.php
+
+    public function deleteProduct($request)
+    {
+        try {
+            $product = Product::find($request->id);
+            if (!$product) {
+                return $this->apiResponse([], 'Product not found', false, 404);
+            }
+            $product->delete();
+            return $this->apiResponse([], 'Product Deleted Successfully', true, 200);
+        } catch (\Throwable $th) {
+            return $this->apiResponse([], $th->getMessage(), false, 500);
+        }
+    }
 
 
-    public function productCategory ($request)
+    public function productCategory($request)
     {
         try {
             $productCategory = ProductCategory::get();
@@ -75,19 +90,19 @@ class ProductService
             return $this->apiResponse([], $th->getMessage(), false, 500);
         }
     }
-    public function productSubCategoryClient ($request)
+    public function productSubCategoryClient($request)
     {
         try {
-            $productCategory = ProductSubCategory::where('product_category_id',$request->category_id)-> get();
+            $productCategory = ProductSubCategory::where('product_category_id', $request->category_id)->get();
             return $this->apiResponse($productCategory, 'Product Category List Get Successfully', true, 200);
         } catch (\Throwable $th) {
             return $this->apiResponse([], $th->getMessage(), false, 500);
         }
     }
-    public function productListSubCategoryClient ($request)
+    public function productListSubCategoryClient($request)
     {
         try {
-            $productCategory = Product::where('product_sub_category_id',$request->sub_category_id)-> get();
+            $productCategory = Product::where('product_sub_category_id', $request->sub_category_id)->get();
             return $this->apiResponse($productCategory, 'Product Category List Get Successfully', true, 200);
         } catch (\Throwable $th) {
             return $this->apiResponse([], $th->getMessage(), false, 500);
@@ -101,7 +116,7 @@ class ProductService
                 'title' => 'required',
             ]);
             $category = [
-            
+
                 'title' => $request->title,
                 'description' => $request->description,
                 'is_active' => $request->is_active,
@@ -139,7 +154,7 @@ class ProductService
             $limit = $request->limit;
             $products = Product::where('is_active', 1)
                 ->where('product_category_id', $request->id)
-            
+
                 ->select(
                     'id',
                     'product_category_id',
@@ -160,7 +175,7 @@ class ProductService
     public function productDetails($request)
     {
         try {
-        
+
             $product = Product::where('id', $request->id)->first();
             return $this->apiResponse($product, 'Product Details Get Successfully', true, 200);
         } catch (\Throwable $th) {
@@ -170,9 +185,9 @@ class ProductService
     // productSubCategory
 
 
-    public function productSubCategoryListByCategoryId($request,$category_id)
+    public function productSubCategoryListByCategoryId($request, $category_id)
     {
-        
+
         try {
             $product = ProductSubCategory::where('product_category_id', $request->category_id)->get();
             return $this->apiResponse($product, 'Product SubCategory List Get Successfully', true, 200);
@@ -183,14 +198,14 @@ class ProductService
 
 
 
-    public function productSubCategorySaveOrUpdate ($request)
+    public function productSubCategorySaveOrUpdate($request)
     {
         try {
             $request->validate([
-                'product_category_id' =>'required',
-                'image' =>'nullable',
-                'description' =>'nullable',
-                'title' =>'required',
+                'product_category_id' => 'required',
+                'image' => 'nullable',
+                'description' => 'nullable',
+                'title' => 'required',
             ]);
 
             $subCategory = [
@@ -208,14 +223,14 @@ class ProductService
                 $productCategory->save();
 
                 return $this->apiResponse([], 'Product Category Saved Successfully', true, 200);
-            }else{
+            } else {
                 $productCategory = ProductSubCategory::find($request->id);
                 $productCategory->update($subCategory);
                 if ($request->hasFile('image')) {
                     $productCategory->image = $this->imageUpload($request, 'image', 'image', $productCategory->image);
                 }
                 $productCategory->save();
-                return $this->apiResponse([], 'Product Category Updated Successfully', true, 200); 
+                return $this->apiResponse([], 'Product Category Updated Successfully', true, 200);
 
             }
 

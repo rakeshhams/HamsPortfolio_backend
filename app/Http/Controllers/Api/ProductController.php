@@ -33,6 +33,12 @@ class ProductController extends Controller
     {
         return $this->productService->saveOrUpdateProduct($request);
     }
+    // In ProductController.php
+
+    public function deleteProduct(Request $request)
+    {
+        return $this->productService->deleteProduct($request);
+    }
 
     public function productByCategoryId(Request $request)
     {
@@ -41,11 +47,11 @@ class ProductController extends Controller
     public function productSubCategoryClient(Request $request)
     {
         return $this->productService->productSubCategoryClient($request);
-        
+
     }
     public function productListSubCategoryClient(Request $request)
     {
-        
+
         return $this->productService->productListSubCategoryClient($request);
 
     }
@@ -55,14 +61,14 @@ class ProductController extends Controller
         return $this->productService->productDetails($request);
     }
 
-    public function productSubCategorySaveOrUpdate (Request $request)
+    public function productSubCategorySaveOrUpdate(Request $request)
     {
         return $this->productService->productSubCategorySaveOrUpdate($request);
     }
 
-    public function productSubCategory(Request $request,$category_id)
+    public function productSubCategory(Request $request, $category_id)
     {
-        return $this->productService->productSubCategoryListByCategoryId($request,$category_id);
+        return $this->productService->productSubCategoryListByCategoryId($request, $category_id);
     }
 
 }
