@@ -361,6 +361,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('service-categories', [ServiceController::class, 'createServiceCategory']);
         Route::post('service-categories/{id}', [ServiceController::class, 'updateServiceCategory']);
         Route::delete('service-categories/{id}', [ServiceController::class, 'deleteServiceCategory']);
+
+        Route::get('service-details/{categoryId}', [ServiceController::class, 'getServiceDetailsByCategory']);
+        Route::post('service-details', [ServiceController::class, 'saveOrUpdateServiceDetails']);
     });
 });
 
@@ -454,6 +457,7 @@ Route::prefix('client')->group(function () {
 
     //Service
     Route::get('service-categories', [ServiceController::class, 'getAllServiceCategories']);
+    Route::get('service-details/{categoryId}', [ServiceController::class, 'getServiceDetailsByCategory']);
 
     //News
     Route::get('news/categories', [StoriesController::class, 'getAllNewsCategories']);

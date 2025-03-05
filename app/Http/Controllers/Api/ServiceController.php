@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\ServiceCategory;
+use App\Models\ServiceDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Traits\HelperTrait;
@@ -122,6 +123,83 @@ class ServiceController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Service category deleted successfully',
+        ], 200);
+    }
+
+
+    // Fetch All Service Details by Service Category
+    public function getServiceDetailsByCategory($categoryId)
+    {
+        $serviceDetails = ServiceDetail::where('service_category_id', $categoryId)->first();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Service details retrieved successfully',
+            'data' => $serviceDetails,
+        ], 200);
+    }
+
+
+    // Create or Update Service Details
+    public function saveOrUpdateServiceDetails(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'service_category_id' => 'required|exists:service_categories,id',
+            'main_title' => 'required|string|max:255',
+            'main_description' => 'nullable|string',
+            'subtitle_one' => 'nullable|string|max:255',
+            'subdescription_one' => 'nullable|string',
+            'subtitle_two' => 'nullable|string|max:255',
+            'subdescription_two' => 'nullable|string',
+            'subtitle_three' => 'nullable|string|max:255',
+            'subdescription_three' => 'nullable|string',
+            'subtitle_four' => 'nullable|string|max:255',
+            'subdescription_four' => 'nullable|string',
+            'subtitle_five' => 'nullable|string|max:255',
+            'subdescription_five' => 'nullable|string',
+            'subtitle_six' => 'nullable|string|max:255',
+            'subdescription_six' => 'nullable|string',
+            'subtitle_seven' => 'nullable|string|max:255',
+            'subdescription_seven' => 'nullable|string',
+            'description' => 'nullable|string',
+            'name' => 'nullable|string|max:255',
+            'image_one' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image_two' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image_three' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation errors',
+                'errors' => $validator->errors(),
+            ], 400);
+        }
+
+        $data = $request->except(['image_one', 'image_two', 'image_three']);
+
+        $serviceDetail = ServiceDetail::updateOrCreate(
+            ['service_category_id' => $request->service_category_id],
+            $data
+        );
+
+        // Handle Image Upload Using HelperTrait
+        if ($request->hasFile('image_one')) {
+            $serviceDetail->image_one = $this->imageUpload($request, 'image_one', 'service_details', $serviceDetail->image_one);
+        }
+        if ($request->hasFile('image_two')) {
+            $serviceDetail->image_two = $this->imageUpload($request, 'image_two', 'service_details', $serviceDetail->image_two);
+        }
+        if ($request->hasFile('image_three')) {
+            $serviceDetail->image_three = $this->imageUpload($request, 'image_three', 'service_details', $serviceDetail->image_three);
+        }
+
+        $serviceDetail->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Service details saved/updated successfully',
+            'data' => $serviceDetail,
         ], 200);
     }
 }
