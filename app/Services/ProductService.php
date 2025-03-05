@@ -272,5 +272,44 @@ class ProductService
     }
 
 
+    // In ProductService.php
+
+// public function deleteProductCategory($request)
+// {
+//     try {
+//         $category = ProductCategory::find($request->id);
+//         if (!$category) {
+//             return $this->apiResponse([], 'Product Category not found', false, 404);
+//         }
+//         // Prevent deletion if there are any associated subcategories
+//         if (ProductSubCategory::where('product_category_id', $category->id)->exists()) {
+//             return $this->apiResponse([], 'Cannot delete Product Category: it has associated subcategories', false, 400);
+//         }
+//         $category->delete();
+//         return $this->apiResponse([], 'Product Category Deleted Successfully', true, 200);
+//     } catch (\Throwable $th) {
+//         return $this->apiResponse([], $th->getMessage(), false, 500);
+//     }
+// }
+
+// public function deleteProductSubCategory($request)
+// {
+//     try {
+//         $subCategory = ProductSubCategory::find($request->id);
+//         if (!$subCategory) {
+//             return $this->apiResponse([], 'Product SubCategory not found', false, 404);
+//         }
+//         // Prevent deletion if there are any associated products
+//         if (Product::where('product_sub_category_id', $subCategory->id)->exists()) {
+//             return $this->apiResponse([], 'Cannot delete Product SubCategory: it has associated products', false, 400);
+//         }
+//         $subCategory->delete();
+//         return $this->apiResponse([], 'Product SubCategory Deleted Successfully', true, 200);
+//     } catch (\Throwable $th) {
+//         return $this->apiResponse([], $th->getMessage(), false, 500);
+//     }
+// }
+
+
 
 }
