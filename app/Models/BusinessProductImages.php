@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class BusinessProductImages extends Model {
     use HasFactory;
 
-    protected $fillable = ['title', 'image'];
+    protected $fillable = ['title', 'image', 'pageLink', 'description'];
 }

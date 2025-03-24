@@ -108,104 +108,115 @@ class BusinessOverviewController extends Controller
         ], 200);
     }
 
-    // Dynamic Images: Fetch
-    public function getDynamicImages()
-    {
-        $dynamicImages = BusinessProductImages::all();
+   // Dynamic Images: Fetch
+public function getDynamicImages()
+{
+    $dynamicImages = BusinessProductImages::all();
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Dynamic images retrieved successfully',
-            'data' => $dynamicImages
-        ], 200);
-    }
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Dynamic images retrieved successfully',
+        'data' => $dynamicImages
+    ], 200);
+}
+
 
     // Dynamic Images: Create
-    public function createDynamicImage(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'title' => 'required|string|max:255',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif'
-        ]);
+public function createDynamicImage(Request $request)
+{
+    $validator = Validator::make($request->all(), [
+        'title' => 'required|string|max:255',
+        'image' => 'required|image|mimes:jpeg,png,jpg,gif',
+        'pageLink' => 'nullable|string|max:255', // Validate pageLink as a string
+        'description' => 'nullable|string', // Validate description as a string
+    ]);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Validation errors',
-                'errors' => $validator->errors()
-            ], 400);
-        }
-
-        $data = $request->only('title');
-        $data['image'] = $this->imageUpload($request, 'image', 'dynamic_images');
-
-        $dynamicImage = BusinessProductImages::create($data);
-
+    if ($validator->fails()) {
         return response()->json([
-            'status' => 'success',
-            'message' => 'Dynamic image created successfully',
-            'data' => $dynamicImage
-        ], 201);
+            'status' => 'error',
+            'message' => 'Validation errors',
+            'errors' => $validator->errors()
+        ], 400);
     }
+
+    $data = $request->only('title', 'pageLink', 'description'); // Include pageLink and description
+    $data['image'] = $this->imageUpload($request, 'image', 'dynamic_images');
+
+    $dynamicImage = BusinessProductImages::create($data);
+
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Dynamic image created successfully',
+        'data' => $dynamicImage
+    ], 201);
+}
+
     // Dynamic Images: Update
-    public function updateDynamicImage(Request $request, $id)
-    {
-        $dynamicImage = BusinessProductImages::find($id);
+public function updateDynamicImage(Request $request, $id)
+{
+    $dynamicImage = BusinessProductImages::find($id);
 
-        if (!$dynamicImage) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Image not found'
-            ], 404);
-        }
-
-        $validator = Validator::make($request->all(), [
-            'title' => 'required|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Validation errors',
-                'errors' => $validator->errors()
-            ], 400);
-        }
-
-        $dynamicImage->title = $request->title;
-
-        if ($request->hasFile('image')) {
-            $dynamicImage->image = $this->imageUpload($request, 'image', 'dynamic_images');
-        }
-
-        $dynamicImage->save();
-
+    if (!$dynamicImage) {
         return response()->json([
-            'status' => 'success',
-            'message' => 'Dynamic image updated successfully',
-            'data' => $dynamicImage
-        ], 200);
+            'status' => 'error',
+            'message' => 'Image not found'
+        ], 404);
     }
+
+    $validator = Validator::make($request->all(), [
+        'title' => 'required|string|max:255',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+        'pageLink' => 'nullable|string|max:255', // Validate pageLink as a string
+        'description' => 'nullable|string', // Validate description as a string
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Validation errors',
+            'errors' => $validator->errors()
+        ], 400);
+    }
+
+    $dynamicImage->title = $request->title;
+    $dynamicImage->pageLink = $request->pageLink; // Update pageLink
+    $dynamicImage->description = $request->description; // Update description
+
+    if ($request->hasFile('image')) {
+        $dynamicImage->image = $this->imageUpload($request, 'image', 'dynamic_images');
+    }
+
+    $dynamicImage->save();
+
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Dynamic image updated successfully',
+        'data' => $dynamicImage
+    ], 200);
+}
+
 
     // Dynamic Images: Delete
-    public function deleteDynamicImage($id)
-    {
-        $dynamicImage = BusinessProductImages::find($id);
+   // Dynamic Images: Delete
+public function deleteDynamicImage($id)
+{
+    $dynamicImage = BusinessProductImages::find($id);
 
-        if (!$dynamicImage) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Image not found'
-            ], 404);
-        }
-
-        $dynamicImage->delete();
-
+    if (!$dynamicImage) {
         return response()->json([
-            'status' => 'success',
-            'message' => 'Image deleted successfully'
-        ], 200);
+            'status' => 'error',
+            'message' => 'Image not found'
+        ], 404);
     }
+
+    $dynamicImage->delete();
+
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Image deleted successfully'
+    ], 200);
+}
+
 
     // Business Material: Fetch All
     public function getBusinessMaterials()
